@@ -1,0 +1,86 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: stock_backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    restart: always
+    networks:
+      - backend
+      - web
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.backend.rule: "(Host(`arvastocks.com`) || Host(`www.arvastocks.com`)) && PathPrefix(`/api`)"
+      traefik.http.services.backend.loadbalancer.server.port: 5000
+      traefik.http.routers.backend.entrypoints: "web"
+      traefik.http.routers.backend.tls: "true"
+      traefik.http.routers.backend.tls.certresolver: "letsencrypt"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: stock_frontend
+    ports:
+      - "5173:80" # Optional: Only for local testing
+    networks:
+      - web
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.frontend.entrypoints: "websecure"
+      traefik.http.routers.frontend.rule: "Host(`arvastocks.com`,`www.arvastocks.com`)"
+      traefik.http.routers.frontend.tls: "true"
+      traefik.http.routers.frontend.tls.certresolver: "letsencrypt"
+  db:
+    image: mariadb:10.6
+    container_name: stock_db
+    env_file:
+      - .env
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb:/var/lib/mysql
+    restart: always
+    networks:
+      - backend
+
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    ports:
+      - "80:80"   # HTTP
+      - "443:443" # HTTPS
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./letsencrypt/acme.json:/acme.json
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - web
+    labels:
+      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.rule=HostRegexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.arvastocks.com`)"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+    restart: always
+
+volumes:
+  mariadb:
+
+networks:
+  backend:
+    name: stockapp_backend
+    driver: bridge
+  web:
+    name: stockapp_web
+    driver: bridge

@@ -1,0 +1,20 @@
+# Node.js dependencies
+node_modules/
+build/
+dist/
+
+# Python dependencies
+__pycache__/
+*.pyc
+*.pyo
+
+# Docker-related files
+letsencrypt/
+certs/
+acme.json
+
+# Environment files
+.env
+
+# Logs
+*.log
