@@ -4,7 +4,6 @@ import os
 from functools import wraps
 from flask import redirect, url_for, g, session, jsonify, request
 
-# Configure logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -52,15 +51,15 @@ def login_required(view):
 # This decorator is used for API routes
 def login_required_to_api(view):
     @wraps(view)
-    def wrapped_view(*args, **kwargs):
+    def wrapped_view(**kwargs):
         if request.method == "OPTIONS":
             response = jsonify({"message": "Preflight request allowed"})
             response.status_code = 204  # No Content
             return response
 
-        if not g.user:
+        if g.user is None:
             return jsonify({"error": "Unauthorized"}), 401
 
-        return view(*args, **kwargs)
+        return view(**kwargs)
 
     return wrapped_view

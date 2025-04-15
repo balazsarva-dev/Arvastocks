@@ -55,9 +55,11 @@ cd Arvastocks
 5. Create an `.env` file in the `backend` directory with the following variables:
    ```env
    DB_HOST=stock_db
-   DB_USER=root
-   DB_PASSWORD=yourpassword
-   DB_NAME=arvastocks
+   DB_PORT=3306
+   MARIADB_USER=root
+   MARIADB_PASSWORD=yourpassword
+   MARIADB_ROOT_PASSWORD=yourrootpassword
+   MARIADB_DATABASE=arvastocks
    API_KEY=your_api_key
    ```
 

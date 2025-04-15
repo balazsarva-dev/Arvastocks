@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 HOST = os.getenv('DB_HOST')
-USER = os.getenv('DB_USER')
-PASSWORD = os.getenv('DB_PASSWORD')
-DATABASE = os.getenv('DB_NAME')
+USER = os.getenv('MARIADB_USER')
+PASSWORD = os.getenv('MARIADB_PASSWORD')
+DATABASE = os.getenv('MARIADB_DATABASE')
 PORT = int(os.getenv('DB_PORT', 3306))
 API_KEY = os.getenv('API_KEY')
 POP_STOCKS1 = ["AAPL", "MSFT", "GOOG", "GOOGL", "AMZN", "NVDA", "TSLA", "META", "JPM", "BAC", "WFC", "HD"]

@@ -10,7 +10,7 @@ from app.configs import Config
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ["https://arvastocks.com", "https://www.arvastocks.com"]}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": ["https://arvastocks.com", "https://www.arvastocks.com", "http://localhost:5173"]}}, supports_credentials=True)
 
 app.config.from_object(Config)
 app.config["CACHE_TYPE"] = "simple"

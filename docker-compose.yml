@@ -10,13 +10,12 @@ services:
       - .env
     restart: always
     networks:
-      - backend
       - web
     labels:
       traefik.enable: "true"
       traefik.http.routers.backend.rule: "(Host(`arvastocks.com`) || Host(`www.arvastocks.com`)) && PathPrefix(`/api`)"
       traefik.http.services.backend.loadbalancer.server.port: 5000
-      traefik.http.routers.backend.entrypoints: "web"
+      traefik.http.routers.backend.entrypoints: "web,websecure"
       traefik.http.routers.backend.tls: "true"
       traefik.http.routers.backend.tls.certresolver: "letsencrypt"
 
@@ -26,7 +25,7 @@ services:
       dockerfile: Dockerfile
     container_name: stock_frontend
     ports:
-      - "5173:80" # Optional: Only for local testing
+      - "5173:80"
     networks:
       - web
     labels:
@@ -46,7 +45,7 @@ services:
       - mariadb:/var/lib/mysql
     restart: always
     networks:
-      - backend
+      - web
 
   traefik:
     image: traefik:v2.10
@@ -76,9 +75,6 @@ volumes:
   mariadb:
 
 networks:
-  backend:
-    name: stockapp_backend
-    driver: bridge
   web:
     name: stockapp_web
     driver: bridge

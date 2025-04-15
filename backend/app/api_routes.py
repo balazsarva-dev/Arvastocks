@@ -1,11 +1,8 @@
 from flask import Blueprint, jsonify, session, request, g
-from flask_cors import CORS
 from app.settings import login_required_to_api, logger
 from app.helper import fetch_news
 
 api = Blueprint("api", __name__)
-
-CORS(api, resources={r"/*": {"origins": ["https://arvastocks.com", "https://www.arvastocks.com"], "supports_credentials": True}})
 
 @api.before_request
 def load_logged_in_user():
@@ -37,7 +34,7 @@ def load_logged_in_user():
 def home():
     return jsonify({"message": "Welcome to the Arvastocks API!"}), 200
 
-@api.route("/api/register", methods=["POST"])
+@api.route("/register", methods=["POST"])
 def register():
     from app.sign_up_in import sign_up_user, registration_accepted_message
     import re
@@ -64,7 +61,7 @@ def register():
         return jsonify({"message": "Failed to register user!"}), 500
 
 
-@api.route('/api/login', methods=['POST'])
+@api.route('/login', methods=['POST'])
 def login():
     from app.sign_up_in import authenticate_user
 
@@ -92,20 +89,21 @@ def login():
             "message": auth_result["error"]
         }), 401
 
-@api.route('/api/logout', methods=['POST'])
+@api.route('/logout', methods=['POST'])
 @login_required_to_api
 def logout():
     session.clear()
     g.user = None
     return jsonify({"message": "Signed out successfully!"}), 200
 
-@api.route('/api/profile', methods=['GET'])
+@api.route('/profile', methods=['GET'])
+@login_required_to_api
 def profile():
     username = g.user["username"]
     email = g.user["email"]
     return jsonify({"username": username, "email": email}), 200
 
-@api.route('/api/delete_user', methods=['POST'])
+@api.route('/delete_user', methods=['POST'])
 @login_required_to_api
 def delete_user():
     from app.sign_up_in import delete_user_from_db_to_api
@@ -128,7 +126,7 @@ def delete_user():
     else:
         return jsonify({"message": "Failed to delete user!"}), 500
     
-@api.route('/api/news_data', methods=['GET'])
+@api.route('/news_data', methods=['GET'])
 def news_data():
     symbol = request.args.get("symbol")
     logger.debug(f"Received request for symbol: {symbol}")
@@ -147,7 +145,7 @@ def news_data():
         logger.error(f"Error fetching news data: {e}")
         return jsonify({"error": "An error occurred while fetching news data"}), 500
     
-@api.route("/api/candlestick", methods=["POST"])
+@api.route("/candlestick", methods=["POST"])
 def candlestick():
     data = request.json
     if not data:
@@ -194,7 +192,7 @@ def plot_helper(symbol, candlestick_setting: bool = True):
     except Exception as e:
         return str(e)
 
-@api.route("/api/contact", methods=["POST"])
+@api.route("/contact", methods=["POST"])
 def contact():
     from app.sign_up_in import send_contact_email
 
@@ -226,7 +224,7 @@ def contact():
         return jsonify({"message": "An internal server error occurred."}), 500
 
 
-@api.route("/api/update_user_password", methods=["POST"])
+@api.route("/update_user_password", methods=["POST"])
 @login_required_to_api
 def update_user_password():
     from app.sign_up_in import update_password
@@ -248,7 +246,7 @@ def update_user_password():
     else:
         return jsonify({"message": "Failed to update password!"}), 500
 
-@api.route("/api/update_user_email", methods=["POST"])
+@api.route("/update_user_email", methods=["POST"])
 @login_required_to_api
 def update_user_email():
     from app.sign_up_in import update_email_to_api

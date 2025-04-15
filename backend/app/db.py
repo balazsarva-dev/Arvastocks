@@ -77,8 +77,6 @@ def record_exists(cursor, date_of_trade, stock_symbol, high_price, low_price, vo
     cursor.execute(check_record_exists, (date_of_trade, stock_symbol, high_price, low_price, volume))
     return cursor.fetchone()["count"] > 0
 
-# Insert stock price into the database
-# This function checks if the record already exists before inserting it
 
 @log_execution
 def insert_stock_price(
