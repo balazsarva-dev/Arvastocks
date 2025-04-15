@@ -12,7 +12,6 @@ MAX_RETRIES = 5
 INITIAL_DELAY = 2
 MAX_RETRY_DELAY = 30
 
-# Database connection settings
 
 @log_execution
 def get_connection():
@@ -37,7 +36,6 @@ def get_connection():
     logger.critical("Max retries reached. Unable to connect to the database.")
     return None
 
-# Release the connection back to the pool
 
 @log_execution
 def release_connection(conn):
@@ -50,7 +48,6 @@ def release_connection(conn):
     except Exception as e:
         logger.error(f"Error releasing database connection: {e}")
 
-# Initialize the database and create tables if they do not exist
 
 @log_execution
 def init_db(app):

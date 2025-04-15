@@ -6,4 +6,5 @@ __pycache__
 *.db
 data/
 myvenv/
+venv/
 explanation.md

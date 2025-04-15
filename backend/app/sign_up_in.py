@@ -215,8 +215,6 @@ def verify_password(username, old_password):
         return False
 
 
-#Delete function to api endpoint
-
 def delete_user_from_db_to_api(username, email, password):
     connection = None
     try:

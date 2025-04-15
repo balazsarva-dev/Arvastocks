@@ -13,17 +13,12 @@ from app.db import get_connection, insert_stock_price, release_connection
 CALLS = 5
 PERIOD = 60
 
-# This function checks if the exception is a rate limit exception
-
 def is_rate_limit_exception(exception):
     return (
         isinstance(exception, requests.exceptions.HTTPError)
         and exception.response.status_code == 429
     )
 
-
-# This function fetches data from the API with rate limiting and retry logic
-# It uses the `ratelimit` and `tenacity` libraries to handle rate limiting and retries
 
 @sleep_and_retry
 @limits(calls=CALLS, period=PERIOD)
@@ -40,7 +35,6 @@ def fetch_data_from_api(symbol, apikey):
     logger.debug(f"Response completed with status code {response.status_code}")
     return data
 
-# This function fetches news sentiment data from the API
 
 def fetch_news(symbol):
     url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={symbol}&apikey="
@@ -53,10 +47,6 @@ def fetch_news(symbol):
     logger.debug(f"Response completed with status code {response.status_code}")
     return data
 
-
-# This function fetches data from the API and handles exceptions
-# It raises a ValueError if the symbol is not provided or if the API key is not set
-# It also logs errors if the API request fails or if the response is invalid
 
 def fetch_data(symbol):
     if not symbol:
@@ -73,13 +63,6 @@ def fetch_data(symbol):
         logger.error("No weekly data found in the response")
         raise ValueError("Failed to process the response") from e
 
-
-# This function processes the weekly data and inserts it into the database
-# It iterates over the weekly data and extracts the open, high, low, close prices and volume
-# It checks if the prices are valid and if the record already exists in the database
-# If the record does not exist, it inserts the data into the database
-# It logs errors if the data is invalid or if there are any exceptions during processing
-# It also logs a warning if no stock price is found for a specific date
 
 def process_weekly_data(cursor, symbol, weekly_data):
     for date, values in weekly_data.items():
@@ -110,9 +93,6 @@ def process_weekly_data(cursor, symbol, weekly_data):
             continue
 
 
-# This function stores the data in the database
-# It checks if the response from the API is valid and contains the weekly time series data
-
 def store_data(symbol, data):
     if "Weekly Time Series" not in data:
         raise ValueError("Invalid response from API")
@@ -137,12 +117,6 @@ def store_data(symbol, data):
         raise ValueError("Failed to store data in the database") from e
 
 
-# This function checks if the stock prices are valid
-# It checks if the prices are numeric and within a valid range (0 to 10000)
-# It logs an error if the prices are invalid and returns False
-# It returns True if the prices are valid
-# It raises a ValueError if the prices cannot be converted to float
-
 def is_valid_price(open_price, high_price, low_price, close_price):
     try:
         open_price = float(open_price)
@@ -158,11 +132,6 @@ def is_valid_price(open_price, high_price, low_price, close_price):
     return True
 
 
-# This function runs in the background to fetch and store data
-# It calls the fetch_data function to get the data from the API
-# It checks if the data is valid and if not, it logs an error
-# It calls the store_data function to store the data in the database
-
 def background_task(symbol):
     data = fetch_data(symbol)
     if not data:
@@ -170,12 +139,6 @@ def background_task(symbol):
         return
     return store_data(symbol, data)
 
-
-# This function generates a candlestick and line chart using Plotly
-# It takes the data, symbol, and candlestick setting as input
-# It extracts the date, open, high, low, and close prices from the data
-# It creates a Plotly figure and adds the candlestick and line traces
-# It updates the layout of the figure and returns the HTML representation of the chart
 
 def plotting_stock_prices(data, symbol, candlestick: bool = True):
     dates = [row["date_of_trade"] for row in data]

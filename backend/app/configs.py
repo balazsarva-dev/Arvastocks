@@ -2,13 +2,7 @@ import os
 from dotenv import load_dotenv
 from app.settings import logger
 
-# Load environment variables from .env file
-# Make sure to create a .env file in the root directory of your project with the required variables.
-
 load_dotenv()
-
-# This function retrieves an environment variable and converts it to the specified type.
-# If the variable is not found, it raises an error or returns a default value.
 
 def get_env_variable(var_name, default=None, type=str):
     env_var = os.getenv(var_name)
@@ -29,8 +23,6 @@ def get_env_variable(var_name, default=None, type=str):
         logger.error(f"Invalid type for environment variable {var_name}. Expected {type.__name__}.")
         raise ValueError(f"Invalid type for environment variable {var_name}. Expected {type.__name__}.")
 
-# This class contains the configuration settings for the application.
-# It retrieves values from environment variables and provides default values where necessary.
 
 class Config:
     DEBUG = get_env_variable("DEBUG", default=False, type=bool)
