@@ -53,6 +53,9 @@ const App = () => {
           <Link to="/login">
             <button>Login</button>
           </Link>
+          <Link to="/news">
+            <button>News</button>
+          </Link>
           {isLoggedIn && (
             <Link to="/profile">
               <button>Profile</button>
@@ -61,20 +64,17 @@ const App = () => {
           <Link to="/candlestick">
             <button>Candlestick</button>
           </Link>
-          <Link to="/about">
-            <button>About</button>
-          </Link>
           <Link to="/contact">
             <button>Contact</button>
-          </Link>
-          <Link to="/news">
-            <button>News</button>
           </Link>
           {isLoggedIn && (
             <Link to="/logout">
               <button>Logout</button>
             </Link>
           )}
+            <Link to="/about">
+            <button>About</button>
+          </Link>
         </nav>
       </div>
       <Routes>

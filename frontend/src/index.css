@@ -72,15 +72,12 @@ button:focus-visible {
 
 .form-input {
   width: 100%;
+  max-width: 400px; /* Limit the width on larger screens */
   padding: 12px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
   margin-bottom: 16px;
-}
-.form-input:focus {
-  border-color: #646cff;
-  outline: none;
 }
 
 form {
@@ -101,6 +98,13 @@ form {
   text-align: center;
 }
 
+@media (max-width: 768px) {
+  .app-container {
+    padding: 12px; /* Reduce padding on smaller screens */
+    gap: 10px; /* Reduce gap between items */
+  }
+}
+
 .profile-container {
   display: flex;
   flex-wrap: wrap;
@@ -112,6 +116,13 @@ form {
   background-color: #272d28;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 16px; /* Reduce padding */
+    gap: 10px; /* Reduce gap */
+  }
 }
 
 .profile-details p {
@@ -126,6 +137,13 @@ form {
 .news-container {
   margin-top: 20px;
   text-align: left;
+}
+
+@media (max-width: 768px) {
+  .news-container {
+    margin-top: 10px; /* Reduce margin on smaller screens */
+    text-align: center; /* Center-align text */
+  }
 }
 
 .news-title {
@@ -153,4 +171,44 @@ form {
   font-size: 18px;
   border: 1px solid #ccc;
   border-radius: 10px;
+}
+.about-container {
+  max-width: 700px; /* Limit the width */
+  margin: 0 auto; /* Center horizontally */
+  padding: 20px; /* Add padding for spacing */
+  text-align: justify; /* Make text easier to read */
+  background-color: #f9f9f9; /* Optional: Add a light background */
+  color:#0b0b0b;
+  border-radius: 8px; /* Optional: Add rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+}
+
+.about-container h1 {
+  font-size: 2rem; /* Adjust heading size */
+  margin-bottom: 16px; /* Add spacing below the heading */
+  text-align: center; /* Center the heading */
+}
+
+.about-container p {
+  font-size: 1rem; /* Adjust paragraph font size */
+  line-height: 1.6; /* Improve readability */
+  margin-bottom: 16px; /* Add spacing between paragraphs */
+}
+
+.footer {
+  background-color: #323532; /* Dark green */
+  color: #ffffff; /* White text for contrast */
+  padding: 10px 10px; /* Padding for spacing */
+  text-align: left;
+  width: 100vw;
+  position:fixed; /* Fix to the bottom */
+  bottom: 0;
+  left: 0;
+  margin: 0;
+}
+@media (max-width: 768px) {
+  .footer {
+    padding: 8px 10px; /* Adjust padding for smaller screens */
+    font-size: 0.9rem; /* Adjust font size */
+  }
 }

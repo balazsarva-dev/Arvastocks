@@ -60,11 +60,6 @@ def authenticate_user(username, password):
                     if not checkpw(password.encode("utf-8"), user["password"].encode("utf-8")):
                         logger.warning("Invalid password")
                         return {"success": False, "error": "Invalid password"}
-                    
-                    # Set session variables
-                    session["user_id"] = user["id"]
-                    session["username"] = user["username"]
-                    session["email"] = user["email"]
                     return {"success": True, "user": user}
             except Exception as e:
                 logger.error(f"Error signing in: {e}")

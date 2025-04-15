@@ -77,6 +77,10 @@ def login():
 
     auth_result = authenticate_user(username, password)
     if auth_result["success"]:
+        user = auth_result["user"]
+        session["user_id"] = user["id"]
+        session["username"] = user["username"]
+        session["email"] = user["email"]
         return jsonify({
             "success": True,
             "username": session['username'],
