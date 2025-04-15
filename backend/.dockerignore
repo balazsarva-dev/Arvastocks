@@ -1,0 +1,9 @@
+.git
+.gitignore
+__pycache__
+*.pyc
+*.log
+*.db
+data/
+myvenv/
+explanation.md

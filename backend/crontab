@@ -1,0 +1,1 @@
+0 1 * * 0 python /app/async_main.py >> /app/cron.log 2>&1
