@@ -2,7 +2,7 @@ import React from 'react';
 
 const Terms = () => {
   return (
-    <div>
+    <div className="about-container">
         <h1>Terms of Service</h1>
         <h3>1. Acceptance of Terms</h3>
         <p>By accessing or using our services, you agree to be bound by these Terms of Service.</p>

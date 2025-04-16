@@ -37,9 +37,11 @@ h1 {
 }
 
 button {
+  text-align: center;
+  margin: 20px auto;
   border-radius: 10px;
   border: 2px solid transparent;
-  padding: 18px 24px;
+  padding: 16px 60px;
   font-size: 16px;
   font-weight: 500;
   font-family: inherit;
@@ -65,7 +67,7 @@ button:focus-visible {
     color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #31a154;
   }
 }
 
@@ -141,7 +143,7 @@ form {
 @media (max-width: 768px) {
   .news-container {
     margin-top: 10px; /* Reduce margin on smaller screens */
-    text-align: center; /* Center-align text */
+    text-align: left; /* Center-align text */
   }
 }
 
@@ -162,7 +164,7 @@ form {
 }
 
 .contact-container .fixed-size {
-  width: 440px;
+  width: 420px;
   height: 200px;
   resize: horizontal;
   overflow: hidden;
@@ -197,13 +199,14 @@ form {
 .footer {
   background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);  color: #ffffff; /* White text for contrast */
-  padding: 5px 5px; /* Padding for spacing */
-  text-align: center;
+  padding: 0px 0px; /* Padding for spacing */
+  text-align: right;
   width: 100vw;
   position:fixed; /* Fix to the bottom */
   bottom: 0;
   left: 0;
-  margin: 0;
+  right: 20px;
+  margin: -15px;
 }
 @media (max-width: 768px) {
   .footer {

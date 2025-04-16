@@ -2,13 +2,13 @@ const About = () => {
     return (
       <div className="about-container">
         <h1>About Us</h1>
-        <p>Welcome to the Stock Data App! This project is a labor of passion, created by Balazs Arva and Andrada Groseanu,
+        <p>Welcome to Arvastocks! This project is a labor of passion, created by Balazs Arva and Andrada Groseanu,
         two dedicated Python developer with a keen interest in challenges, both in backend and frontend. We have been immersed
         in the world of coding in the last couple of years, a journey fueled by a desire to learn and grow continuously.
         This app represents a significant step in that journey, providing a practical platform to apply and expand
         the knowledge we have.</p>
 
-        <p>The Stock Data App is designed to empower individuals with the information they need to make
+        <p>Designed to empower individuals with the information they need to make
         informed investment decisions. We believe that everyone should have access to clear, concise,
         and reliable data to navigate the complexities of the stock market. Whether you're a seasoned investor
         or just starting out, our goal is to provide you with the tools and insights you need to succeed.</p>
