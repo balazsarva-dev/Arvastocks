@@ -61,3 +61,15 @@
   .register-button:hover {
     background-color: #31a154; /* Darker red on hover */
   }
+
+  .home-description-list {
+    list-style-type: none; /* Remove default bullet points */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+  }
+  
+  .home-description-list li {
+    margin-bottom: 10px; /* Add spacing between list items */
+    font-size: 1.2rem; /* Adjust font size */
+    color: #ffffff; /* Match the text color */
+  }

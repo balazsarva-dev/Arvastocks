@@ -195,10 +195,10 @@ form {
 }
 
 .footer {
-  background-color: #323532; /* Dark green */
-  color: #ffffff; /* White text for contrast */
-  padding: 10px 10px; /* Padding for spacing */
-  text-align: left;
+  background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);  color: #ffffff; /* White text for contrast */
+  padding: 5px 5px; /* Padding for spacing */
+  text-align: center;
   width: 100vw;
   position:fixed; /* Fix to the bottom */
   bottom: 0;
