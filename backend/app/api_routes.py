@@ -55,7 +55,6 @@ def register():
 
     signed_up_user = sign_up_user(username, password, email)
     if signed_up_user:
-        registration_accepted_message(username, email)
         return jsonify({"message": "User registered successfully!"}), 200
     else:
         return jsonify({"message": "Failed to register user!"}), 500
