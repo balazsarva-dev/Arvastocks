@@ -21,3 +21,5 @@ acme.json
 
 # Settings files
 .vscode/
+docker-compose.yml
+traefik.yml
