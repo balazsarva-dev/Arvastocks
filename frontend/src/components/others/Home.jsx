@@ -1,6 +1,6 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Home.css';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import "./Home.css";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -8,26 +8,20 @@ const HomePage = () => {
   return (
     <div className="homepage-container">
       <div className="homepage-content">
-        <h1 className="homepage-title">Welcome to Arvastocks</h1>
+        <h1 className="homepage-title">Welcome</h1>
         <p className="homepage-description">
-          Arvastocks is a stock app designed to help you make smarter investment decisions.
-        </p>
-        <p className="homepage-description">
-          Search for stock symbols, view charts, and stay updated with the latest news.
-        </p>
-        <p className="homepage-description">
-          With Machine Learning tools, we aim to support your investment journey.
+          This app is designed to help you make smarter investment decisions.
         </p>
         <div className="homepage-buttons">
           <button
             className="homepage-button register-button"
-            onClick={() => navigate('/register')}
+            onClick={() => navigate("/register")}
           >
             Register
           </button>
           <button
             className="homepage-button login-button"
-            onClick={() => navigate('/login')}
+            onClick={() => navigate("/login")}
           >
             Login
           </button>
