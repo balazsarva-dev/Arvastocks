@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 COPY entrypoint.sh .
 COPY async_main.py .
-COPY crontab /etc/cron.d/async_data_downloader
 COPY . .
 
 # Install Python dependencies
