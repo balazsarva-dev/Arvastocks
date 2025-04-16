@@ -136,11 +136,7 @@ form {
 
 .news-container {
   max-width: 700px; /* Same width as About.jsx */
-  margin: 0 auto; /* Center horizontally */
-  padding: 20px; /* Add padding for spacing */
-  border-radius: 8px; /* Optional: Rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow */
-  text-align: center; /* Align text to the left */
+  text-align: left; /* Align text to the left */
 }
 
 @media (max-width: 768px) {

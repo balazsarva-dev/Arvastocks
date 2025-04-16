@@ -227,7 +227,6 @@ def delete_user_from_db_to_api(username, email, password):
                         return False
                     cursor.execute(delete_user, (username, email))
                     connection.commit()
-                    session.clear()
                     return True
             except Exception as e:
                 logger.error(f"Error deleting user: {e}")
