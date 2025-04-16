@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, session, request, g
 from app.settings import login_required_to_api, logger
 from app.helper import fetch_news
-
+# Some comment added to push the code to the remote repository
 api = Blueprint("api", __name__)
 
 @api.before_request
