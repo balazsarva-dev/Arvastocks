@@ -26,7 +26,7 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div className="form-container">
       <h1>Register</h1>
       <form onSubmit={handleRegister}>
         <input
@@ -62,7 +62,7 @@ const Register = () => {
           className="form-input"
 	  autocomplete="new-password"
         />
-        <button type="submit">Register</button>
+        <button type="submit" className='form-button'>Register</button>
       </form>
       {response && (
         <div>

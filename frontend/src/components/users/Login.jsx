@@ -41,7 +41,7 @@ const Login = () => {
   };
 
   return (
-    <div>
+    <div className="form-container">
       <h1>Login</h1>
       <form onSubmit={handleLogin}>
         <input
@@ -63,7 +63,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
           className="form-input"
-          autocomplete="current-password"
+          autoComplete="current-password"
         />
         <div className="checkbox-container">
           <input
@@ -74,7 +74,9 @@ const Login = () => {
           />
           <label htmlFor="rememberMe">Remember me</label>
         </div>
-        <button type="submit">Login</button>
+        <button type="submit" className="form-button">
+          Login
+        </button>
       </form>
       <div className="register-container">
         <p>Don't have an account?</p>

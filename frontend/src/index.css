@@ -1,3 +1,11 @@
+/* Reset some default browser styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Set global font and background color */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -13,29 +21,58 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Layout: Ensure header stays at the top */
+body {
+  display: flex;
+  flex-direction: column; /* Stack header and content vertically */
+  min-height: 100vh; /* Full viewport height */
+  margin: 0;
+  padding: 0;
+  background-color: #2f756a; /* Background color */
+  color: #ffffff; /* Default text color */
 }
 
-body {
-  margin: 20px;
-  padding: 25px;
+/* Header: Fixed at the top */
+.header {
+  width: 100%;
+  background-color: #272d28; /* Dark background for header */
+  color: #ffffff; /* White text for contrast */
+  padding: 10px 20px; /* Add padding for spacing */
+  text-align: center;
+  position: fixed; /* Fix header at the top */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Ensure it stays above other content */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Main content: Push below the header */
+.main-content {
+  flex: 1; /* Allow content to grow and fill available space */
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
+  align-items: center;
+  flex-direction: column; /* Stack items vertically */
+  padding: 80px 20px; /* Add padding and account for fixed header height */
+  margin: 0 auto;
+  max-width: 1200px; /* Limit the width of the content */
+  text-align: center; /* Center-align text */
 }
 
-h1 {
-  font-size: 2.0em;
-  line-height: 1.5;
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  color: #ffffff; /* White text for headings */
 }
 
+p {
+  line-height: 1.6; /* Improve readability */
+  margin-bottom: 1rem;
+  color: #e0e0e0; /* Softer white for readability */
+}
+
+/* Buttons */
 button {
   text-align: center;
   margin: 20px auto;
@@ -59,158 +96,197 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #31a154;
-  }
-}
-
-.form-input {
+/* Footer: Fixed at the bottom */
+.footer {
   width: 100%;
-  max-width: 400px; /* Limit the width on larger screens */
-  padding: 12px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 16px;
-}
-
-form {
-  max-width: 400px;
-  margin: 10 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: normal;
-}
-
-.app-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px;
-  padding: 24px;
-  margin-top: 4px;
+  background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
+  color: #ffffff; /* White text for contrast */
+  padding: 10px 20px; /* Padding for spacing */
   text-align: center;
+  position: fixed; /* Fix footer at the bottom */
+  bottom: 0;
+  left: 0;
+  z-index: 1000; /* Ensure it stays above other content */
 }
 
+/* Responsive Adjustments */
 @media (max-width: 768px) {
-  .app-container {
-    padding: 12px; /* Reduce padding on smaller screens */
-    gap: 10px; /* Reduce gap between items */
+  body {
+    padding: 0; /* Remove extra padding for smaller screens */
+  }
+
+  .main-content {
+    padding: 100px 10px; /* Adjust padding for smaller screens */
+  }
+
+  h1 {
+    font-size: 1.8rem; /* Adjust heading size */
+  }
+
+  p {
+    font-size: 1rem; /* Adjust paragraph size */
+  }
+
+  button {
+    padding: 12px 40px; /* Adjust button size */
+    font-size: 0.9rem; /* Reduce font size */
+  }
+
+  .footer {
+    padding: 8px 10px; /* Adjust padding for smaller screens */
+    font-size: 0.9rem; /* Adjust font size */
   }
 }
 
-.profile-container {
+.form-container {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  gap: 20px;
-  margin-top: 4px;
-  padding: 24px;
-  text-align: center;
-  background-color: #272d28;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-@media (max-width: 768px) {
-  .profile-container {
-    padding: 16px; /* Reduce padding */
-    gap: 10px; /* Reduce gap */
-  }
-}
-
-.profile-details p {
-  font-size: 18px;
-  margin: 10px 0;
-}
-
-.profile-details strong {
-  color: #31a154;
-}
-
-.news-container {
-  max-width: 700px; /* Same width as About.jsx */
-  text-align: left; /* Align text to the left */
-}
-
-@media (max-width: 768px) {
-  .news-container {
-    margin-top: 10px; /* Reduce margin on smaller screens */
-    text-align: left; /* Center-align text */
-  }
-}
-
-.news-title {
-  color: #25e19f;
-  font-size: 20px;
-  font-weight: bold;
-  text-decoration: none;
-}
-.news-title:hover {
-  text-decoration: underline;
-  color: #000000;
-}
-
-.error-message {
-  color: red;
-  font-weight: bold;
-}
-
-.contact-container .fixed-size {
-  width: 420px;
-  height: 200px;
-  resize: horizontal;
-  overflow: hidden;
-  padding: 4px;
-  font-size: 18px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-}
-.about-container {
-  max-width: 700px; /* Limit the width */
-  margin: 0 auto; /* Center horizontally */
+  flex-direction: column; /* Stack fields vertically */
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  max-width: 400px; /* Limit the width */
+  margin: 20px auto; /* Center horizontally with spacing */
   padding: 20px; /* Add padding for spacing */
-  text-align: justify; /* Make text easier to read */
-  background-color: #f9f9f9; /* Optional: Add a light background */
-  color:#0b0b0b;
-  border-radius: 8px; /* Optional: Add rounded corners */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a subtle shadow */
+  background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
-.about-container h1 {
+.form-container input {
+  width: 100%; /* Full width */
+  padding: 12px; /* Add padding for better usability */
+  margin-bottom: 16px; /* Add spacing between fields */
+  font-size: 1rem; /* Larger font size */
+  border: 1px solid #ccc; /* Light border */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.form-container button {
+  width: 100%; /* Full width */
+  padding: 12px; /* Add padding for better usability */
+  font-size: 1rem; /* Larger font size */
+  background-color: #31a154; /* Green background */
+  color: #ffffff; /* White text */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+}
+
+.form-container button:hover {
+  background-color: #283da7; /* Darker green on hover */
+}
+
+.terms-container, .about-container {
+  max-width: 700px; /* Limit the width */
+  margin: 20px auto; /* Center horizontally with spacing */
+  padding: 20px; /* Add padding for spacing */
+  background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
+  color: #ffffff; /* Black font color */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  text-align: justify; /* Justify text for better readability */
+}
+
+.terms-container h1, .about-container h1 {
   font-size: 2rem; /* Adjust heading size */
   margin-bottom: 16px; /* Add spacing below the heading */
   text-align: center; /* Center the heading */
 }
 
-.about-container p {
+.terms-container p, .about-container p {
   font-size: 1rem; /* Adjust paragraph font size */
   line-height: 1.6; /* Improve readability */
   margin-bottom: 16px; /* Add spacing between paragraphs */
 }
-
-.footer {
+.news-container, .candlestick-container {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  max-width: 800px; /* Increase the width for larger fields */
+  width: 100%; /* Ensure responsiveness */
+  margin: 20px auto; /* Center horizontally with spacing */
+  padding: 60px; /* Add more padding for better spacing */
   background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);  color: #ffffff; /* White text for contrast */
-  padding: 0px 0px; /* Padding for spacing */
-  text-align: right;
-  width: 100vw;
-  position:fixed; /* Fix to the bottom */
-  bottom: 0;
-  left: 0;
-  right: 20px;
-  margin: -15px;
+  border-radius: 15px; /* Rounded corners */
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
+  text-align: center; /* Center-align text */
 }
-@media (max-width: 768px) {
-  .footer {
-    padding: 8px 10px; /* Adjust padding for smaller screens */
-    font-size: 0.9rem; /* Adjust font size */
-  }
+
+.news-container h2, .candlestick-container h2 {
+  font-size: 2rem; /* Larger heading size */
+  margin-bottom: 1.5rem; /* Add spacing below the heading */
+}
+
+.news-container p, .candlestick-container p {
+  font-size: 1rem; /* Slightly larger font size for readability */
+  line-height: 1.8; /* Improve readability */
+  margin-bottom: 1.5rem; /* Add spacing between paragraphs */
+}
+
+.news-container button, .candlestick-container button {
+  padding: 12px 30px; /* Larger buttons */
+  font-size: 1rem; /* Adjust font size */
+  margin: 15px; /* Add spacing between buttons */
+  background-color: #31a154; /* Green background for buttons */
+  color: #ffffff; /* White text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+
+.news-container button:hover, .candlestick-container button:hover {
+  background-color: #283da7; /* Darker green on hover */
+}
+
+.news-container input, .candlestick-container input {
+  width: 75%; /* Full width */
+  padding: 10px; /* Increase padding for better usability */
+  margin-bottom: 20px; /* Add more spacing between fields */
+  font-size: 1.1rem; /* Slightly larger font size */
+  border: 2px solid #ccc; /* Slightly thicker border */
+  border-radius: 8px; /* More rounded corners */
+  background-color: #f9f9f9; /* Light background for contrast */
+  color: #333; /* Darker text color for readability */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus effect */
+}
+
+.news-container input:focus, .candlestick-container input:focus {
+  border-color: #31a154; /* Green border on focus */
+  box-shadow: 0 0 8px rgba(49, 161, 84, 0.5); /* Subtle glow effect */
+  outline: none; /* Remove default outline */
+}
+.checkbox-container {
+  display: flex;
+  align-items: center; /* Align checkbox and label vertically */
+  gap: 10px; /* Add spacing between the checkbox and label */
+  margin-bottom: 0px; /* Add spacing below the checkbox */
+  font-size: 1rem; /* Adjust font size for the label */
+  color: #ffffff; /* White text for the label */
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 16px; /* Adjust checkbox size */
+  height: 16px; /* Adjust checkbox size */
+  cursor: pointer; /* Add pointer cursor */
+}
+
+.message-box {
+  width: 100%; /* Full width */
+  max-width: 600px; /* Limit the width */
+  height: 150px; /* Set height for the message box */
+  padding: 15px; /* Add padding for better usability */
+  font-size: 1rem; /* Adjust font size */
+  border: 2px solid #ccc; /* Slightly thicker border */
+  border-radius: 8px; /* Rounded corners */
+  background-color: #000000; /* Light background for contrast */
+  color: #333; /* Darker text color for readability */
+  resize: vertical; /* Allow vertical resizing */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus effect */
+}
+
+.message-box:focus {
+  border-color: #31a154; /* Green border on focus */
+  box-shadow: 0 0 8px rgba(49, 161, 84, 0.5); /* Subtle glow effect */
+  outline: none; /* Remove default outline */
 }

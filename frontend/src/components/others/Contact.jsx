@@ -35,8 +35,8 @@ const Contact = () => {
   };
 
   return (
-    <div className="contact-container">
-      <h2>Contact Us</h2>
+    <div className="form-container">
+      <h1>Contact Us</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="name">Name:</label>
         <input
@@ -60,12 +60,11 @@ const Contact = () => {
           required
         />
 
-        <label htmlFor="message">Message:</label>
         <textarea
           id="message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="form-textarea fixed-size"
+          className="message-box"
           placeholder="Enter your message"
           required
         ></textarea>
