@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, session, request, g
 from app.settings import login_required_to_api, logger
-from app.helper import fetch_news
-# Some comment added to push the code to the remote repository
+from app.helper import fetch_data
+
 api = Blueprint("api", __name__)
 
 @api.before_request
@@ -50,7 +50,7 @@ def register():
     if not username or not email or not password:
         return jsonify({"message": "Invalid inputs. All fields are required."}), 400
 
-    if not re.match(r"^[a-zA-Z._%+-][a-zA-Z._%+-]*@[a-zA-Z-]+\.[a-zA-Z]{2,}$", email):  # Simple email validation
+    if not re.match(r"^[a-zA-Z._%+-][a-zA-Z._%+-]*@[a-zA-Z-]+\.[a-zA-Z]{2,}$", email):
         return jsonify({"message": "Invalid email address."}), 400
 
     signed_up_user = sign_up_user(username, password, email)
@@ -111,7 +111,7 @@ def profile():
 @api.route('/delete_user', methods=['POST'])
 @login_required_to_api
 def delete_user():
-    from app.sign_up_in import delete_user_from_db_to_api
+    from app.sign_up_in import delete_user_from_db
     
     data = request.json
     if not data:
@@ -124,13 +124,13 @@ def delete_user():
     if not username or not email or not password:
         return jsonify({"message": "Invalid inputs. All fields are required."}), 400
 
-    deleted_user = delete_user_from_db_to_api(username, email, password)
+    deleted_user = delete_user_from_db(username, email, password)
     if deleted_user:
         session.clear()
         return jsonify({"message": "User deleted successfully!"}), 200
     else:
         return jsonify({"message": "Failed to delete user!"}), 500
-    
+
 @api.route('/news_data', methods=['GET'])
 def news_data():
     symbol = request.args.get("symbol")
@@ -139,7 +139,7 @@ def news_data():
         logger.debug("No stock symbol provided")
         return jsonify({"error": "Stock symbol is required"}), 400
     try:
-        news = fetch_news(symbol)
+        news = fetch_data(symbol, news=True)
         logger.debug(f"Fetched news: {news}")
         if news:
             return jsonify(news), 200
@@ -254,7 +254,7 @@ def update_user_password():
 @api.route("/update_user_email", methods=["POST"])
 @login_required_to_api
 def update_user_email():
-    from app.sign_up_in import update_email_to_api
+    from app.sign_up_in import update_email
 
     data = request.json
     if not data:
@@ -267,7 +267,7 @@ def update_user_email():
         return jsonify({"message": "Invalid inputs. All fields are required."}), 400
 
     username = g.user["username"]
-    email_updated = update_email_to_api(username, new_email, password)
+    email_updated = update_email(username, new_email, password)
     if email_updated:
         return jsonify({"message": "Email changed successfully!"}), 200
     else:

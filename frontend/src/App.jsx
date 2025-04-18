@@ -9,6 +9,7 @@ import About from "./components/others/About";
 import Terms from "./components/others/Terms";
 import Register from "./components/users/Register";
 import Login from "./components/users/Login";
+import Logout from "./components/users/Logout";
 
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/terms" element={<Terms />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
         </Routes>
       </Layout>
     </Router>

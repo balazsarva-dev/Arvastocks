@@ -88,28 +88,6 @@ def send_contact_email(name, email, message):
         return False
 
 
-def delete_user_from_db(username, email):
-    connection = None
-    try:
-        connection = get_connection()
-        if connection:
-            try:
-                with connection.cursor() as cursor:
-                    cursor.execute(delete_user, (username, email))
-                    connection.commit()
-                    session.clear()
-                    return True
-            except Exception as e:
-                logger.error(f"Error deleting user: {e}")
-                return False
-            finally:
-                if connection:
-                    release_connection(connection)
-    except Exception as e:
-        logger.error(f"Error deleting user: {e}")
-        return False
-
-
 def registration_accepted_message(username, email):
     try:
         msg = Message(
@@ -128,62 +106,6 @@ def registration_accepted_message(username, email):
 
 
 def update_password(username, old_password, new_password):
-    verification = verify_password(username, old_password)
-    if not verification:
-        return False
-    connection = None
-    try:
-        connection = get_connection()
-        if connection:
-            try:
-                with connection.cursor() as cursor:
-                    new_password = hashpw(
-                        new_password.encode("utf-8"), gensalt()
-                    ).decode("utf-8")
-                    cursor.execute(update_user_password, (new_password, username))
-                    connection.commit()
-                    return True
-            except Exception as e:
-                logger.error(f"Error updating password: {e}")
-                return False
-            finally:
-                if connection:
-                    release_connection(connection)
-    except Exception as e:
-        logger.error(f"Error updating password: {e}")
-        return False
-
-
-def update_email(username, new_email, password):
-    logger.info(f"Updating email for {username} to {new_email}")
-    verification = verify_password(username, password)
-    if not verification:
-        logger.warning("Password verification failed")
-        return False
-    connection = None
-    try:
-        connection = get_connection()
-        if connection:
-            try:
-                with connection.cursor() as cursor:
-                    logger.info(f"Updating email for {username} to {new_email}")
-                    cursor.execute(update_user_email, (new_email, username))
-                    connection.commit()
-                    logger.info(f"Email updated for {username} to {new_email}")
-                    return True
-            except Exception as e:
-                logger.error(f"Error updating email: {e}")
-                return False
-            finally:
-                if connection:
-                    release_connection(connection)
-    except Exception as e:
-        logger.error(f"Error updating email: {e}")
-        return False
-
-
-def verify_password(username, old_password):
-    logger.info(f"Verifying password for {username}")
     connection = None
     try:
         connection = get_connection()
@@ -198,19 +120,22 @@ def verify_password(username, old_password):
                     if not checkpw(old_password.encode("utf-8"), user["password"].encode("utf-8")):
                         logger.warning(f"Password verification failed for {username}")
                         return False
+                    new_password = hashpw(new_password.encode("utf-8"), gensalt()).decode("utf-8")
+                    cursor.execute(update_user_password, (new_password, username))
+                    connection.commit()
                     return True
             except Exception as e:
-                logger.error(f"Error verifying password: {e}")
+                logger.error(f"Error updating password: {e}")
                 return False
             finally:
                 if connection:
                     release_connection(connection)
     except Exception as e:
-        logger.error(f"Error verifying password: {e}")
+        logger.error(f"Error updating password: {e}")
         return False
 
 
-def delete_user_from_db_to_api(username, email, password):
+def delete_user_from_db(username, email, password):
     connection = None
     try:
         connection = get_connection()
@@ -238,7 +163,7 @@ def delete_user_from_db_to_api(username, email, password):
         logger.error(f"Error deleting user: {e}")
         return False
 
-def update_email_to_api(username, new_email, password):
+def update_email(username, new_email, password):
     connection = None
     try:
         with get_connection() as connection:

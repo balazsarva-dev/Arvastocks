@@ -6,7 +6,6 @@ from app.queries import (
     check_record_exists,
 )
 import time
-import os
 
 MAX_RETRIES = 5
 INITIAL_DELAY = 2
