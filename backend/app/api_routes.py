@@ -100,6 +100,7 @@ def logout():
     return jsonify({"message": "Signed out successfully!"}), 200
 
 @api.route('/profile', methods=['GET'])
+@login_required_to_api
 def profile():
     if 'user_id' not in session:
         return jsonify({"error": "Unauthorized"}), 401
