@@ -10,7 +10,10 @@ import Terms from "./components/others/Terms";
 import Register from "./components/users/Register";
 import Login from "./components/users/Login";
 import Logout from "./components/users/Logout";
-
+import Profile from "./components/users/Profile"; 
+import ChangeEmail from "./components/users/ChangeEmail";
+import ChangePassword from "./components/users/ChangePassword";
+import Delete from "./components/users/Delete";
 
 const App = () => {
   return (
@@ -27,6 +30,11 @@ const App = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/update_email" element={<ChangeEmail />} />
+          <Route path="/change_password" element={<ChangePassword />} />
+          <Route path="/delete_account" element={<Delete />} />
+          {/* Add more routes as needed */}
         </Routes>
       </Layout>
     </Router>

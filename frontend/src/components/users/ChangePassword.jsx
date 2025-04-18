@@ -36,7 +36,7 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="change-password-container">
+    <div className="form-container">
       <h2>Change Password</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="oldPassword">Old Password:</label>
@@ -64,7 +64,7 @@ const ChangePassword = () => {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {successMessage && <p className="success-message">{successMessage}</p>}
 
-        <button type="submit" className="change-password-button">
+        <button type="submit" className="register-button">
           Update Password
         </button>
       </form>

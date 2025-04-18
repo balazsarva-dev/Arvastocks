@@ -32,7 +32,7 @@ const Profile = () => {
   }
 
   if (!userData) {
-    return <p>Loading...</p>; // Show a loading message while fetching data
+    return <p>Loading...</p>;
   }
 
   return (
@@ -44,7 +44,7 @@ const Profile = () => {
       </div>
       <div className="profile-actions">
         <button onClick={() => navigate('/update_email')}>Update email</button>
-        <button onClick={() => navigate('/update_password')}>Update password</button>
+        <button onClick={() => navigate('/change_password')}>Update password</button>
         <button onClick={() => navigate('/delete_account')}>Delete account</button>
       </div>
     </div>

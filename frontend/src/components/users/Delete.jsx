@@ -30,7 +30,7 @@ const Delete = () => {
   };
 
   return (
-    <div className="delete-container">
+    <div className="form-container">
       <h1>Delete Account</h1>
       <form onSubmit={handleDelete}>
         <input

@@ -41,8 +41,8 @@ const ChangeEmail = () => {
   };
 
   return (
-    <div className="change-email-container">
-      <h2>Change Email</h2>
+    <div className="form-container">
+      <h2>Update Email</h2>
       <form onSubmit={handleSubmit}>
         <label htmlFor="newEmail">New Email:</label>
         <input
@@ -69,7 +69,7 @@ const ChangeEmail = () => {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {successMessage && <p className="success-message">{successMessage}</p>}
 
-        <button type="submit" className="change-email-button" disabled={isLoading}>
+        <button type="submit" className="register-button" disabled={isLoading}>
           {isLoading ? 'Updating...' : 'Update Email'}
         </button>
       </form>
