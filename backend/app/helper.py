@@ -27,24 +27,25 @@ def is_rate_limit_exception(exception):
     wait=wait_exponential(multiplier=1, min=4, max=60),
     retry=retry_if_exception_type(is_rate_limit_exception),
 )
-def fetch_data_from_api(symbol, apikey, news: bool = False):
+def fetch_data_from_api(symbol, apikey=os.getenv("API_KEY"), news: bool = False):
     if news is True:
         url = f"https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers={symbol}&apikey="
-    url = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={symbol}&apikey="
+    else:
+        url = f"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={symbol}&apikey="
     endpoint = url + apikey
     response = requests.get(endpoint)
     data = response.json()
     logger.debug(f"Response completed with status code {response.status_code}")
     return data
 
-def fetch_data(symbol, news: bool = False):
+def fetch_data(symbol):
     if not symbol:
         raise ValueError("Symbol is required")
     apikey = os.getenv("API_KEY")
     if not apikey:
         raise ValueError("API_KEY is required")
     try:
-        return fetch_data_from_api(symbol, apikey, news)
+        return fetch_data_from_api(symbol, apikey)
     except requests.exceptions.RequestException as e:
         logger.error(f"API request failed: {e}")
         raise ValueError("Failed to fetch data from the API") from e

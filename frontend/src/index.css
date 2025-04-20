@@ -218,7 +218,7 @@ button:focus-visible {
 }
 
 .news-container p, .candlestick-container p {
-  font-size: 1rem; /* Slightly larger font size for readability */
+  font-size: 2rem; /* Slightly larger font size for readability */
   line-height: 1.8; /* Improve readability */
   margin-bottom: 1.5rem; /* Add spacing between paragraphs */
 }

@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, session, request, g
 from app.settings import login_required_to_api, logger
-from app.helper import fetch_data
+from app.helper import fetch_data_from_api
 
 api = Blueprint("api", __name__)
 
@@ -140,7 +140,7 @@ def news_data():
         logger.debug("No stock symbol provided")
         return jsonify({"error": "Stock symbol is required"}), 400
     try:
-        news = fetch_data(symbol, news=True)
+        news = fetch_data_from_api(symbol, news=True)
         logger.debug(f"Fetched news: {news}")
         if news:
             return jsonify(news), 200
