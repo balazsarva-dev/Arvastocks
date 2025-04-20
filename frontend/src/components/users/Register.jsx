@@ -1,27 +1,38 @@
 import React, { useState } from 'react';
-import api from '../../services/api'; // Adjusted the import path
+import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
+import * as yup from 'yup';
+
+const validationSchema = yup.object().shape({
+  username: yup.string().required('Username is required'),
+  email: yup.string().email('Invalid email format').required('Email is required'),
+  password: yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
+});
 
 const Register = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post('/register', {
-        username,
-        email,
-        password,
-      });
-
-      setResponse(res.data);
-      alert('Registration successful!'); // Keep this as requested
+      setIsLoading(true);
+      await validationSchema.validate({ username, email, password });
+      const res = await api.post('/register', { username, email, password });
+      alert('Registration successful! Please log in.');
+      navigate('/login'); // Redirect to login page
     } catch (error) {
-      // Improved error handling
-      setError(error.response?.data?.message || 'Failed to register. Please try again.');
+      if (error.name === 'ValidationError') {
+        setError(error.message); // Handle validation errors
+      } else {
+        setError(error.response?.data?.message || 'Failed to register. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -38,7 +49,7 @@ const Register = () => {
           onChange={(e) => setUsername(e.target.value)}
           required
           className="form-input"
-	  autocomplete="username"
+          autoComplete="username"
         />
         <input
           type="email"
@@ -49,7 +60,7 @@ const Register = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
           className="form-input"
-	  autocomplete="email"
+          autoComplete="email"
         />
         <input
           type="password"
@@ -60,16 +71,12 @@ const Register = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
           className="form-input"
-	  autocomplete="new-password"
+          autoComplete="new-password"
         />
-        <button type="submit" className='form-button'>Register</button>
+        <button type="submit" className="form-button" disabled={isLoading}>
+          {isLoading ? 'Registering...' : 'Register'}
+        </button>
       </form>
-      {response && (
-        <div>
-          <h2>Response:</h2>
-          <pre>{JSON.stringify(response, null, 2)}</pre>
-        </div>
-      )}
       {error && <p className="error-message">{error}</p>}
     </div>
   );

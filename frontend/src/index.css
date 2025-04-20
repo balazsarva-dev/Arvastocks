@@ -213,12 +213,12 @@ button:focus-visible {
 }
 
 .news-container h2, .candlestick-container h2 {
-  font-size: 2rem; /* Larger heading size */
+  font-size: 1.5rem; /* Larger heading size */
   margin-bottom: 1.5rem; /* Add spacing below the heading */
 }
 
 .news-container p, .candlestick-container p {
-  font-size: 2rem; /* Slightly larger font size for readability */
+  font-size: 1rem; /* Slightly larger font size for readability */
   line-height: 1.8; /* Improve readability */
   margin-bottom: 1.5rem; /* Add spacing between paragraphs */
 }
