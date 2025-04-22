@@ -4,7 +4,11 @@ import api from '../../services/api';
 import * as yup from 'yup';
 
 const validationSchema = yup.object().shape({
-  username: yup.string().required('Username is required'),
+  username: yup
+    .string()
+    .matches(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores')
+    .min(3, 'Username must be at least 3 characters long')
+    .required('Username is required'),
   email: yup.string().email('Invalid email format').required('Email is required'),
   password: yup.string().min(8, 'Password must be at least 8 characters').required('Password is required'),
 });

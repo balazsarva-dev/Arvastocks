@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import api from '../../services/api'; // Use the centralized Axios instance
+import api from '../../services/api';
+import yup from 'yup';
+
+const emailSchema = yup.object().shape({
+  new_email: yup.string().email('Invalid email format').required('Email is required'),
+  password: yup.string().required('Password is required'),
+});
 
 const ChangeEmail = () => {
   const [newEmail, setNewEmail] = useState('');
@@ -20,6 +26,7 @@ const ChangeEmail = () => {
     setIsLoading(true); // Show loading state
 
     try {
+      await emailSchema.validate({ new_email: newEmail, password });
       const response = await api.post('/update_user_email', {
         new_email: newEmail,
         password,

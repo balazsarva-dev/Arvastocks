@@ -1,22 +1,28 @@
 import React, { useState } from 'react';
-import api from '../../services/api'; // Use the centralized Axios instance
+import api from '../../services/api';
+import * as yup from 'yup';
+
+const passwordSchema = yup.object().shape({
+  old_password: yup.string().required('Old password is required'),
+  new_password: yup
+    .string()
+    .min(8, 'New password must be at least 8 characters')
+    .required('New password is required'),
+});
 
 const ChangePassword = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Basic validation
-    if (!oldPassword || !newPassword) {
-      setErrorMessage('Both fields are required.');
-      return;
-    }
+    setIsLoading(true);
 
     try {
+      await passwordSchema.validate({ old_password: oldPassword, new_password: newPassword });
       const response = await api.post('/update_user_password', {
         old_password: oldPassword,
         new_password: newPassword,
@@ -27,11 +33,14 @@ const ChangePassword = () => {
       setOldPassword('');
       setNewPassword('');
     } catch (error) {
-      console.error('Error:', error);
       setErrorMessage(
-        error.response?.data?.message || 'An error occurred. Please try again later.'
+        error.name === 'ValidationError'
+          ? error.message
+          : error.response?.data?.message || 'An error occurred. Please try again later.'
       );
       setSuccessMessage('');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -64,8 +73,8 @@ const ChangePassword = () => {
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {successMessage && <p className="success-message">{successMessage}</p>}
 
-        <button type="submit" className="register-button">
-          Update Password
+        <button type="submit" className="register-button" disabled={isLoading}>
+          {isLoading ? 'Updating...' : 'Update Password'}
         </button>
       </form>
     </div>
