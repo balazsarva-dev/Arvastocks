@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import api from '../../services/api';
-import yup from 'yup';
+import * as yup from 'yup';
 
 const emailSchema = yup.object().shape({
   new_email: yup.string().email('Invalid email format').required('Email is required'),
