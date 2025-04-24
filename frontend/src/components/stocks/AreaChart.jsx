@@ -124,7 +124,7 @@ const AreaChart = () => {
   };
 
   return (
-    <div className="candlestick-container" style={{ backgroundColor: 'white', padding: '20px' }}>
+    <div className="candlestick-container">
       <h1>Area Chart with Zoom</h1>
       <div className="form-input">
         <input
