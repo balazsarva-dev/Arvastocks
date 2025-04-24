@@ -159,44 +159,64 @@ def candlestick():
         return jsonify({"message": "Invalid inputs. Please provide JSON data."}), 400
 
     symbol = data.get("symbol")
-    candlestick_setting = data.get("candlestick_setting", True)
 
     if not symbol:
         return jsonify({"message": "Invalid inputs. Stock symbol is required."}), 400
 
     try:
-        figure = plot_helper(symbol, candlestick_setting)
-        return jsonify({"figure": figure}), 200
+        figure = plot_helper(symbol)
+        if not figure:
+            logger.error("No data found for the given stock symbol.")
+            return jsonify({"error": "No data found for the given stock symbol"}), 404
+        return jsonify(figure), 200
     except Exception as e:
         logger.error(f"Error generating candlestick chart: {e}")
         return jsonify({"error": "Failed to generate candlestick chart"}), 500
 
-def plot_helper(symbol, candlestick_setting: bool = True):
+def plot_helper(symbol):
     from app.queries import select_data_by_symbol
-    from app.helper import plotting_stock_prices
     from app.db import get_connection, release_connection
     from app.settings import logger
     
     connection = None
     try:
         connection = get_connection()
-        if connection:
-            try:
-                with connection.cursor() as cursor:
-                    logger.debug(f"Fetching data for symbol: {symbol}")
-                    cursor.execute(select_data_by_symbol, (symbol,))
-                    data = cursor.fetchall()
-                    logger.debug(f"Fetched data: {data}")
-                return plotting_stock_prices(data, symbol, candlestick=candlestick_setting)
-            except Exception as e:
-                return str(e)
-            finally:
-                if connection:
-                    release_connection(connection)
-        else:
-            return "Database connection not available."
+        if not connection:
+            logger.error("Database connection not available.")
+            raise Exception("Database connection not available.")
+        with connection.cursor() as cursor:
+            logger.debug(f"Fetching data for symbol: {symbol}")
+            cursor.execute(select_data_by_symbol, (symbol,))
+            data = cursor.fetchall()
+            logger.debug(f"Fetched data: {len(data)} rows for symbol: {symbol}")
+            return validate_data(data, symbol)
     except Exception as e:
-        return str(e)
+        logger.error(f"Error fetching data for symbol {symbol}: {e}")
+        raise
+    finally:
+        if connection:
+            release_connection(connection)
+
+def validate_data(data, symbol):
+    if not data:
+        logger.info(f"No data found for symbol: {symbol}")
+        return []
+    stocks = []
+    for row in data:
+        try:
+            stocks.append({
+                "x": row["date_of_trade"].isoformat() if row["date_of_trade"] else None,
+                "o": float(row["open_price"]) if row["open_price"] is not None else 0.0,
+                "h": float(row["high_price"]) if row["high_price"] is not None else 0.0,
+                "l": float(row["low_price"]) if row["low_price"] is not None else 0.0,
+                "c": float(row["close_price"]) if row["close_price"] is not None else 0.0,
+            })
+        except Exception as e:
+            logger.error(f"Error processing row: {row}, Error: {e}")
+            continue
+    logger.info(f"Processed data for symbol: {symbol}, Stocks: {stocks}")
+    return stocks
+
 
 @api.route("/contact", methods=["POST"])
 def contact():

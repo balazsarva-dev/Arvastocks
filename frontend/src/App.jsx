@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import HomePage from "./components/others/Home";
 import News from "./components/stocks/News";
-import Candlestick from "./components/stocks/Candlestick";
+import AreaChart from "./components/stocks/AreaChart";
 import Contact from "./components/others/Contact";
 import About from "./components/others/About";
 import Terms from "./components/others/Terms";
@@ -23,7 +23,7 @@ const App = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/news" element={<News />} />
-          <Route path="/candlestick" element={<Candlestick />} />
+          <Route path="/areachart" element={<AreaChart />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/terms" element={<Terms />} />

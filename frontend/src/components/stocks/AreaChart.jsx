@@ -124,9 +124,9 @@ const AreaChart = () => {
   };
 
   return (
-    <div className="chart-container" style={{ backgroundColor: 'white', padding: '20px' }}>
+    <div className="candlestick-container" style={{ backgroundColor: 'white', padding: '20px' }}>
       <h1>Area Chart with Zoom</h1>
-      <div className="chart-input">
+      <div className="form-input">
         <input
           type="text"
           placeholder="Enter stock symbol"
@@ -134,7 +134,7 @@ const AreaChart = () => {
           onChange={(e) => setSymbol(e.target.value.toUpperCase())} // Convert input to uppercase
           className="form-input"
         />
-        <button onClick={fetchChartData} className="chart-button" disabled={loading}>
+        <button onClick={fetchChartData} className="candlestick-button" disabled={loading}>
           {loading ? 'Loading...' : 'Get Chart'}
         </button>
       </div>
