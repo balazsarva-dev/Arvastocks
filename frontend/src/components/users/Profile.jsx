@@ -45,6 +45,7 @@ const Profile = () => {
       <div className="profile-actions">
         <button onClick={() => navigate('/update_email')}>Update email</button>
         <button onClick={() => navigate('/change_password')}>Update password</button>
+        <button onClick={() => navigate('/logout')}>Logout</button>
         <button onClick={() => navigate('/delete_account')}>Delete account</button>
       </div>
     </div>

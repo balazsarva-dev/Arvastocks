@@ -28,7 +28,7 @@ body {
   min-height: 100vh; /* Full viewport height */
   margin: 0;
   padding: 0;
-  background-color: #2f756a; /* Background color */
+  background-color: #428e83; /* Background color */
   color: #ffffff; /* Default text color */
 }
 
@@ -75,10 +75,10 @@ p {
 /* Buttons */
 button {
   text-align: center;
-  margin: 20px auto;
+  margin: 15px auto;
   border-radius: 10px;
   border: 2px solid transparent;
-  padding: 16px 60px;
+  padding: 16px 30px;
   font-size: 16px;
   font-weight: 500;
   font-family: inherit;
@@ -258,10 +258,10 @@ button:focus-visible {
 }
 
 .news-title {
-  font-size: 1.5rem; /* Increase the font size */
+  font-size: 1.35rem; /* Increase the font size */
   font-weight: bold; /* Make the title bold */
   margin-bottom: 10px; /* Add spacing below the title */
-  color: #62f878; /* Darker color for better readability */
+  color: #ffffff; /* Darker color for better readability */
 }
 .checkbox-container {
   display: flex;

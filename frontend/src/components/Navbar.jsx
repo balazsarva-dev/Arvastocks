@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Navbar.css'; // Ensure the CSS file is imported
+import './Navbar.css';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,9 +21,7 @@ const Navbar = () => {
         <li><a href="/contact">Contact</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/terms">Terms</a></li>
-        <li><a href="/register">Register</a></li>
         <li><a href="/login">Login</a></li>
-        <li><a href="/logout">Logout</a></li>
         <li><a href="/profile">Profile</a></li>
       </ul>
     </header>
