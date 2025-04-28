@@ -99,6 +99,7 @@ button:focus-visible {
 /* Footer: Fixed at the bottom */
 .footer {
   width: 100%;
+  height: 40px;
   background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
   color: #ffffff; /* White text for contrast */
   padding: 10px 20px; /* Padding for spacing */
@@ -197,7 +198,7 @@ button:focus-visible {
   line-height: 1.6; /* Improve readability */
   margin-bottom: 16px; /* Add spacing between paragraphs */
 }
-.news-container, .candlestick-container {
+.news-container {
   display: flex;
   flex-direction: column; /* Stack items vertically */
   align-items: center; /* Center horizontally */
@@ -212,18 +213,18 @@ button:focus-visible {
   text-align: center; /* Center-align text */
 }
 
-.news-container h2, .candlestick-container h2 {
+.news-container h2 {
   font-size: 1.5rem; /* Larger heading size */
   margin-bottom: 1.5rem; /* Add spacing below the heading */
 }
 
-.news-container p, .candlestick-container p {
+.news-container p {
   font-size: 1rem; /* Slightly larger font size for readability */
   line-height: 1.8; /* Improve readability */
   margin-bottom: 1.5rem; /* Add spacing between paragraphs */
 }
 
-.news-container button, .candlestick-container button {
+.news-container button {
   padding: 12px 30px; /* Larger buttons */
   font-size: 1rem; /* Adjust font size */
   margin: 15px; /* Add spacing between buttons */
@@ -235,23 +236,22 @@ button:focus-visible {
   transition: background-color 0.3s ease; /* Smooth hover effect */
 }
 
-.news-container button:hover, .candlestick-container button:hover {
+.news-container button:hover {
   background-color: #283da7; /* Darker green on hover */
 }
 
-.news-container input, .candlestick-container input {
+.news-container input {
   width: 75%; /* Full width */
   padding: 10px; /* Increase padding for better usability */
   margin-bottom: 20px; /* Add more spacing between fields */
   font-size: 1.1rem; /* Slightly larger font size */
   border: 2px solid #ccc; /* Slightly thicker border */
   border-radius: 8px; /* More rounded corners */
-  background-color: #f9f9f9; /* Light background for contrast */
   color: #333; /* Darker text color for readability */
   transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus effect */
 }
 
-.news-container input:focus, .candlestick-container input:focus {
+.news-container input:focus {
   border-color: #31a154; /* Green border on focus */
   box-shadow: 0 0 8px rgba(49, 161, 84, 0.5); /* Subtle glow effect */
   outline: none; /* Remove default outline */

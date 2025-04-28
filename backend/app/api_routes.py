@@ -29,14 +29,13 @@ def load_logged_in_user():
         if connection:
             release_connection(connection)
 
-
 @api.route("/")
 def home():
     return jsonify({"message": "Welcome to the Arvastocks API!"}), 200
 
 @api.route("/register", methods=["POST"])
 def register():
-    from app.sign_up_in import sign_up_user, registration_accepted_message
+    from app.sign_up_in import sign_up_user
     import re
 
     data = request.json
@@ -293,24 +292,3 @@ def update_user_email():
         return jsonify({"message": "Email changed successfully!"}), 200
     else:
         return jsonify({"message": "Failed to change email!"}), 500
-
-@api.route("/important_stocks", methods=["GET"])
-def important_stocks():
-    stocks = []
-    displayed_stocks = ['AAPL', 'AMZN', 'TSLA']
-    for stock in displayed_stocks:
-        try:
-            stock_data = fetch_data_from_api(stock)
-            if stock_data:
-                stock_data["symbol"] = stock
-                stock_data["weekly_data"] = stock_data.get("Weekly Time Series", {})
-                latest_date = max(stock_data["weekly_data"].keys())
-                stock_data["latest_data"] = stock_data["weekly_data"][latest_date]
-                stocks.append({
-                    "symbol": stock,
-                    "data": latest_date,
-                    "open": latest_date["1. open"],})
-        except Exception as e:
-            logger.error(f"Error fetching data for {stock}: {e}")
-            continue
-    return jsonify(stocks), 200

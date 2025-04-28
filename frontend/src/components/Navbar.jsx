@@ -17,7 +17,8 @@ const Navbar = () => {
       <ul className={`nav-links ${isMenuOpen ? 'show' : ''}`}>
         <li><a href="/">Home</a></li>
         <li><a href="/news">News</a></li>
-        <li><a href="/areachart">AreaChart</a></li>
+        <li><a href="/area-chart">AreaChart</a></li>
+        <li><a href="/line-chart">LineChart</a></li>
         <li><a href="/contact">Contact</a></li>
         <li><a href="/about">About</a></li>
         <li><a href="/terms">Terms</a></li>

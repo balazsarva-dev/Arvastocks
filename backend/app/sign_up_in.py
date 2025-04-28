@@ -9,7 +9,6 @@ from app.queries import (
 from app.db import get_connection, release_connection
 from app.settings import logger
 from app import mail
-from flask import session
 from flask_mail import Message
 from bcrypt import hashpw, checkpw, gensalt
 import os

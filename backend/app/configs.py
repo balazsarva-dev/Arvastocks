@@ -41,3 +41,7 @@ class Config:
     MARIADB_DATABASE = get_env_variable("MARIADB_DATABASE")
     DB_PORT = get_env_variable("DB_PORT", default=3306, type=int)
     API_KEY = get_env_variable("API_KEY")
+    CACHE_TYPE = get_env_variable("CACHE_TYPE")
+    SESSION_COOKIE_HTTPONLY = get_env_variable("SESSION_COOKIE_HTTPONLY")
+    SESSION_COOKIE_SECURE = get_env_variable("SESSION_COOKIE_SECURE")
+    SESSION_COOKIE_SAMESITE = get_env_variable("SESSION_COOKIE_SAMESITE")

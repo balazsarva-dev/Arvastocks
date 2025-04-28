@@ -2,7 +2,7 @@ import logging
 import time
 import os
 from functools import wraps
-from flask import redirect, url_for, g, session, jsonify, request
+from flask import g, jsonify, request
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -38,17 +38,6 @@ def log_execution(func):
 
     return wrapper
 
-
-def login_required(view):
-    @wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for("login"))
-        return view(**kwargs)
-
-    return wrapped_view
-
-# This decorator is used for API routes
 def login_required_to_api(view):
     @wraps(view)
     def wrapped_view(**kwargs):
@@ -59,7 +48,5 @@ def login_required_to_api(view):
 
         if g.user is None:
             return jsonify({"error": "Unauthorized"}), 401
-
         return view(**kwargs)
-
     return wrapped_view

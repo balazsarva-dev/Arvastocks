@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Chart, registerables } from 'chart.js';
-import zoomPlugin from 'chartjs-plugin-zoom';
 import 'chartjs-adapter-date-fns'; // For time-based x-axis
+import zoomPlugin from 'chartjs-plugin-zoom'; // For zooming functionality
 import api from '../../services/api'; // Centralized Axios instance
+import './Chart.css'; // Import CSS for styling
 
-// Register chart.js components and the zoom plugin
+// Register chart.js components and plugins
 Chart.register(...registerables, zoomPlugin);
 
 const AreaChart = () => {
@@ -27,12 +28,18 @@ const AreaChart = () => {
       // Fetch chart data from the backend
       const response = await api.post('/candlestick', { symbol });
 
-      const rawData = response.data;
+      let rawData = response.data;
 
       if (!rawData || rawData.length === 0) {
         setError('No valid data available for the selected stock symbol.');
         return;
       }
+
+      // Filter data to include only the last 12 months
+      const twelveMonthsAgo = new Date();
+      twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
+
+      rawData = rawData.filter((item) => new Date(item.x) >= twelveMonthsAgo);
 
       // If a chart already exists, destroy it before creating a new one
       if (chartInstance.current) {
@@ -82,14 +89,11 @@ const AreaChart = () => {
               },
             },
           },
-          layout: {
-            padding: 0, // Remove padding
-          },
           scales: {
             x: {
               type: 'time', // Use a time scale for the x-axis
               time: {
-                unit: 'day',
+                unit: 'month', // Group data by month
               },
               title: {
                 display: true,
@@ -124,17 +128,17 @@ const AreaChart = () => {
   };
 
   return (
-    <div className="candlestick-container">
-      <h1>Area Chart with Zoom</h1>
-      <div className="form-input">
+    <div className="chart">
+      <h1>Area Chart (Last 12 Months)</h1>
+      <div className="chart-input">
         <input
           type="text"
           placeholder="Enter stock symbol"
           value={symbol}
           onChange={(e) => setSymbol(e.target.value.toUpperCase())} // Convert input to uppercase
-          className="form-input"
+          className="chart-input-field"
         />
-        <button onClick={fetchChartData} className="candlestick-button" disabled={loading}>
+        <button onClick={fetchChartData} className="chart-button" disabled={loading}>
           {loading ? 'Loading...' : 'Get Chart'}
         </button>
       </div>

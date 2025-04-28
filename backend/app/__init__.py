@@ -13,12 +13,6 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ["https://arvastocks.com", "https://www.arvastocks.com", "http://localhost:5173"]}}, supports_credentials=True)
 
 app.config.from_object(Config)
-app.config["CACHE_TYPE"] = "simple"
-
-app.config["SESSION_COOKIE_HTTPONLY"] = True
-app.config["SESSION_COOKIE_SECURE"] = True  # Set to True in production (requires HTTPS)
-app.config["SESSION_COOKIE_SAMESITE"] = "None"
-
 
 def create_db_pool():
     try:
