@@ -1,12 +1,12 @@
 .chart {
-    background-color: #428e83;
+    background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
     margin-top: 20px;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%; /* Full width */
-    max-width: 100%; /* Prevent overflow */
-    margin: 0 auto; /* Center the chart container */
+    max-width: 75%; /* Prevent overflow */
+    margin: 20px auto; /* Center horizontally with spacing */
   }
   
   .chart-input {
@@ -20,9 +20,18 @@
     width: 300px;
     padding: 12px;
     font-size: 16px;
-    border: 1px solid #ccc;
     border-radius: 4px;
     margin-right: 10px;
+    border: 2px solid #ccc; /* Slightly thicker border */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 0 8px rgba(236, 108, 3, 0.5); /* Subtle glow effect */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus effect */
+  }
+
+  .chart-input-field:focus {
+    border-color: #f86204; /* Green border on focus */
+    box-shadow: 0 0 8px rgba(49, 161, 84, 0.5); /* Green glow effect */
+    outline: none;
   }
   
   .chart-button {

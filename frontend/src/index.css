@@ -157,8 +157,15 @@ button:focus-visible {
   padding: 12px; /* Add padding for better usability */
   margin-bottom: 16px; /* Add spacing between fields */
   font-size: 1rem; /* Larger font size */
-  border: 1px solid #ccc; /* Light border */
+  border: 2px solid #ccc; /* Light border */
   border-radius: 4px; /* Rounded corners */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus effect */
+}
+
+.form-container input:focus {
+  border-color: #f86204; /* Green border on focus */
+  box-shadow: 0 0 8px rgba(49, 161, 84, 0.5); /* Green glow effect */
+  outline: none;
 }
 
 .form-container button {
@@ -168,7 +175,7 @@ button:focus-visible {
   background-color: #31a154; /* Green background */
   color: #ffffff; /* White text */
   border: none; /* Remove border */
-  border-radius: 4px; /* Rounded corners */
+  border-radius: 5px; /* Rounded corners */
   cursor: pointer; /* Pointer cursor */
 }
 
@@ -201,7 +208,7 @@ button:focus-visible {
 .news-container {
   display: flex;
   flex-direction: column; /* Stack items vertically */
-  align-items: center; /* Center horizontally */
+  align-items: left; /* Center horizontally */
   justify-content: center; /* Center vertically */
   max-width: 800px; /* Increase the width for larger fields */
   width: 100%; /* Ensure responsiveness */
@@ -210,7 +217,7 @@ button:focus-visible {
   background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
   border-radius: 15px; /* Rounded corners */
   box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
-  text-align: center; /* Center-align text */
+  text-align: left; /* Center-align text */
 }
 
 .news-container h2 {
@@ -252,8 +259,8 @@ button:focus-visible {
 }
 
 .news-container input:focus {
-  border-color: #31a154; /* Green border on focus */
-  box-shadow: 0 0 8px rgba(49, 161, 84, 0.5); /* Subtle glow effect */
+  border-color: #a15c31; /* Green border on focus */
+  box-shadow: 0 0 8px rgba(236, 108, 3, 0.5); /* Subtle glow effect */
   outline: none; /* Remove default outline */
 }
 
