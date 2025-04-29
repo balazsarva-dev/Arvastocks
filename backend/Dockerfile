@@ -1,4 +1,4 @@
-FROM python:3.9-slim-bullseye
+FROM python:3.9-bullseye
 
 WORKDIR /app
 
@@ -8,6 +8,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     default-libmysqlclient-dev \
     && rm -rf /var/lib/apt/lists/*
 
+COPY requirements.txt ./
+COPY entrypoint.sh ./
+COPY async_main.py ./
 COPY . .
 
 RUN pip install --no-cache-dir -r requirements.txt
