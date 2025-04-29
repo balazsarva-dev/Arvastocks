@@ -35,7 +35,7 @@ def home():
 
 @api.route("/register", methods=["POST"])
 def register():
-    from app.sign_up_in import sign_up_user, registration_accepted_message
+    from app.sign_up_in import sign_up_user
     import re
 
     data = request.json
@@ -54,9 +54,7 @@ def register():
 
     signed_up_user = sign_up_user(username, password, email)
     if signed_up_user:
-        email_sent = registration_accepted_message(username, email)
-        if email_sent:
-            return jsonify({"message": "User registered successfully!"}), 200
+        return jsonify({"message": "User registered successfully!"}), 200
     else:
         return jsonify({"message": "Failed to register user!"}), 500
 

@@ -12,7 +12,6 @@ from app import mail
 from flask_mail import Message
 from bcrypt import hashpw, checkpw, gensalt
 import os
-from celery_app import celery
 
 def sign_up_user(username, password, email):
     connection = None
@@ -70,33 +69,16 @@ def authenticate_user(username, password):
         logger.error(f"Error signing in: {e}")
         return {"success": False, "error": "Internal server error"}
 
-@celery.task
-def send_async_email(msg_data):
-    from app import mail
-    from flask_mail import Message
-    
-    try:
-        msg = Message(
-            subject=msg_data["subject"],
-            sender=msg_data["sender"],
-            recipients=msg_data["recipients"],
-            body=msg_data["body"],
-        )
-        mail.send(msg)
-        logger.info("Email sent successfully")
-    except Exception as e:
-        logger.error(f"Error sending email: {e}")
-
-
 def send_contact_email(name, email, message):
     try:
-        msg_data = {
-            "subject": "Contact Form Submission",
-            "sender": os.getenv("MAIL_DEFAULT_SENDER"),
-            "recipients": [os.getenv("MAIL_DEFAULT_SENDER")],
-            "body": f"Name: {name}\nEmail: {email}\nMessage: {message}",
-        }
-        send_async_email.delay(msg_data)
+        msg = Message(
+            subject="Contact Form Submission",
+            sender=os.getenv("MAIL_DEFAULT_SENDER"),
+            recipients=[os.getenv("MAIL_DEFAULT_SENDER")],
+            body=f"Name: {name}\nEmail: {email}\nMessage: {message}",
+        )
+        msg.send()
+        logger.info(f"Contact email sent to {os.getenv('MAIL_DEFAULT_SENDER')}")
         return True
     except Exception as e:
         logger.error(f"Error sending message: {e}")
@@ -104,18 +86,18 @@ def send_contact_email(name, email, message):
 
 def registration_accepted_message(username, email):
     try:
-        msg_data = {
-            "subject": "Registration Accepted",
-            "sender": os.getenv("MAIL_DEFAULT_SENDER"),
-            "recipients": [email],
-            "body": f"Hello {username},\n\nYour registration has been accepted.\n\nBest regards,\nThe Team",
-        }
-        send_async_email.delay(msg_data)
+        msg = Message(
+            subject="Registration Accepted",
+            sender=os.getenv("MAIL_DEFAULT_SENDER"),
+            recipients=[email],
+            body=f"Hello {username},\n\nYour registration has been accepted.\n\nBest regards,\nThe Team",
+        )
+        msg.send()
+        logger.info(f"Registration accepted email sent to {email}")
         return True
     except Exception as e:
-        logger.error(f"Error sending registration message: {e}")
+        logger.error(f"Error sending registration accepted message: {e}")
         return False
-
 
 def update_password(username, old_password, new_password):
     connection = None

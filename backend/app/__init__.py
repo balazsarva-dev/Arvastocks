@@ -8,7 +8,6 @@ import pymysql
 from dbutils.pooled_db import PooledDB
 from app.configs import Config
 from flask_cors import CORS
-from celery_app import make_celery
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": ["https://arvastocks.com", "https://www.arvastocks.com", "http://localhost:5173"]}}, supports_credentials=True)
@@ -40,7 +39,6 @@ def register_extensions(app):
     compress = Compress(app)
     mail = Mail(app)
     csrf = CSRFProtect(app)
-    celery = make_celery(app)
     logger.info("Extensions registered successfully.")
     return cache, compress, mail, csrf, celery
 
@@ -61,7 +59,7 @@ app.db_pool = create_db_pool()
 
 init_app(app)
 
-cache, compress, mail, csrf, celery = register_extensions(app)
+cache, compress, mail, csrf = register_extensions(app)
 from app.api_routes import api as api_blueprint
 csrf.exempt(api_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")
