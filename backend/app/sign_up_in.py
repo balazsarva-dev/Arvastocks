@@ -12,7 +12,7 @@ from app import mail
 from flask_mail import Message
 from bcrypt import hashpw, checkpw, gensalt
 import os
-
+from celery_app import celery
 
 def sign_up_user(username, password, email):
     connection = None
@@ -70,34 +70,47 @@ def authenticate_user(username, password):
         logger.error(f"Error signing in: {e}")
         return {"success": False, "error": "Internal server error"}
 
+@celery.task
+def send_async_email(msg_data):
+    from app import mail
+    from flask_mail import Message
+    
+    try:
+        msg = Message(
+            subject=msg_data["subject"],
+            sender=msg_data["sender"],
+            recipients=msg_data["recipients"],
+            body=msg_data["body"],
+        )
+        mail.send(msg)
+        logger.info("Email sent successfully")
+    except Exception as e:
+        logger.error(f"Error sending email: {e}")
+
 
 def send_contact_email(name, email, message):
     try:
-        msg = Message(
-            "New message from your website",
-            sender=os.getenv("MAIL_DEFAULT_SENDER"),
-            recipients=[os.getenv("MAIL_DEFAULT_SENDER")],
-        )
-        msg.body = f"Name: {name}\nEmail: {email}\n\n{message}"
-        msg.subject = f"Contact from {name}"
-        mail.send(msg)
+        msg_data = {
+            "subject": "Contact Form Submission",
+            "sender": os.getenv("MAIL_DEFAULT_SENDER"),
+            "recipients": [os.getenv("MAIL_DEFAULT_SENDER")],
+            "body": f"Name: {name}\nEmail: {email}\nMessage: {message}",
+        }
+        send_async_email.delay(msg_data)
         return True
     except Exception as e:
         logger.error(f"Error sending message: {e}")
         return False
 
-
 def registration_accepted_message(username, email):
     try:
-        msg = Message(
-            "Welcome to the Stock Price App",
-            sender=os.getenv("MAIL_DEFAULT_SENDER"),
-            recipients=[email],
-        )
-        msg.body = f"Dear {username},\n\nThank you for registering with us. We hope you enjoy our services.\
-            \nPlease do not hesitate to contact us if you have any questions.\n\nBest regards,\nThe Stock Price App Team"
-        msg.subject = "Welcome to the Stock Price App"
-        mail.send(msg)
+        msg_data = {
+            "subject": "Registration Accepted",
+            "sender": os.getenv("MAIL_DEFAULT_SENDER"),
+            "recipients": [email],
+            "body": f"Hello {username},\n\nYour registration has been accepted.\n\nBest regards,\nThe Team",
+        }
+        send_async_email.delay(msg_data)
         return True
     except Exception as e:
         logger.error(f"Error sending registration message: {e}")
