@@ -40,7 +40,7 @@ def register_extensions(app):
     mail = Mail(app)
     csrf = CSRFProtect(app)
     logger.info("Extensions registered successfully.")
-    return cache, compress, mail, csrf, celery
+    return cache, compress, mail, csrf
 
 
 from app.db import init_db
