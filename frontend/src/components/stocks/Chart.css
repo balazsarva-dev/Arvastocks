@@ -1,11 +1,10 @@
 .chart {
     background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
-    margin-top: 20px;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 100%; /* Full width */
-    max-width: 75%; /* Prevent overflow */
+    max-width: 800px; /* Prevent overflow */
     margin: 20px auto; /* Center horizontally with spacing */
   }
   
@@ -19,7 +18,7 @@
   .chart-input-field {
     width: 300px;
     padding: 12px;
-    font-size: 16px;
+    font-size: 1rem; /* Adjust font size */
     border-radius: 4px;
     margin-right: 10px;
     border: 2px solid #ccc; /* Slightly thicker border */

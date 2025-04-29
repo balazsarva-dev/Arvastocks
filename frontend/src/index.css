@@ -215,7 +215,7 @@ button:focus-visible {
   margin: 20px auto; /* Center horizontally with spacing */
   padding: 60px; /* Add more padding for better spacing */
   background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
-  border-radius: 15px; /* Rounded corners */
+  border-radius: 8px; /* Rounded corners */
   box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow for depth */
   text-align: left; /* Center-align text */
 }
