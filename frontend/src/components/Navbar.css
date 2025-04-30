@@ -17,8 +17,8 @@
 
 .nav-links {
   display: flex;
-  list-style: none;
-  gap: 25px;
+  list-style:none;
+  gap: 20px;
 }
 
 .nav-links li a {
@@ -36,11 +36,12 @@
 .hamburger {
   display: none; /* Hidden by default */
   font-size: 1.2rem;
-  background: none;
+  background:#31a154;
   border: none;
   color: #ffffff;
   cursor: pointer;
 }
+
 
 /* Responsive Styles */
 @media (max-width: 768px) {

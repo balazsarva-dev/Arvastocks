@@ -153,6 +153,7 @@ button:focus-visible {
 }
 
 .form-container input {
+  background-color: #ffffff; /* Light background for input fields */
   width: 100%; /* Full width */
   padding: 12px; /* Add padding for better usability */
   margin-bottom: 16px; /* Add spacing between fields */
@@ -248,10 +249,11 @@ button:focus-visible {
 }
 
 .news-container input {
-  width: 75%; /* Full width */
-  padding: 10px; /* Increase padding for better usability */
-  margin-bottom: 20px; /* Add more spacing between fields */
-  font-size: 1.1rem; /* Slightly larger font size */
+  background-color: #ffffff; /* Light background for input fields */
+  width: 70%; /* Full width */
+  padding: 12px; /* Increase padding for better usability */
+  margin-right: 10px; /* Add more spacing between fields */
+  font-size: 1rem; /* Slightly larger font size */
   border: 2px solid #ccc; /* Slightly thicker border */
   border-radius: 8px; /* More rounded corners */
   color: #333; /* Darker text color for readability */
