@@ -1,6 +1,17 @@
 from flask import Blueprint, jsonify, session, request, g
 from app.settings import login_required_to_api, logger
 from app.helper import fetch_data_from_api
+from app.sign_up_in import (
+                            sign_up_user,
+                            send_email,
+                            authenticate_user, 
+                            delete_user_from_db,
+                            update_email, 
+                            update_password
+)
+from app import app
+import asyncio
+import re
 
 api = Blueprint("api", __name__)
 
@@ -35,9 +46,6 @@ def home():
 
 @api.route("/register", methods=["POST"])
 def register():
-    from app.sign_up_in import sign_up_user
-    import re
-
     data = request.json
     if not data:
         return jsonify({"message": "Invalid inputs. Please provide JSON data."}), 400
@@ -49,20 +57,28 @@ def register():
     if not username or not email or not password:
         return jsonify({"message": "Invalid inputs. All fields are required."}), 400
 
-    if not re.match(r"^[a-zA-Z._%+-][a-zA-Z._%+-]*@[a-zA-Z-]+\.[a-zA-Z]{2,}$", email):
+    if not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
         return jsonify({"message": "Invalid email address."}), 400
 
     signed_up_user = sign_up_user(username, password, email)
     if signed_up_user:
-        return jsonify({"message": "User registered successfully!"}), 200
+        subject = "Welcome to Arvastocks!"
+        body = f"Hello {username},\n\nThank you for signing up for Arvastocks! We are excited to have you on board.\
+        \n\nBest regards,\nThe Arvastocks Team"
+        from_email = app.config["MAIL_DEFAULT_SENDER"]
+        to_email = email
+        
+        email_sent = asyncio.run(send_email(subject, body, from_email, to_email))
+        if email_sent:
+            return jsonify({"message": "User registered, and sent welcome email!"}), 200
+        else:
+            return jsonify({"message": "User registered successfully, but failed to send welcome email!"}), 500
     else:
         return jsonify({"message": "Failed to register user!"}), 500
 
 
 @api.route('/login', methods=['POST'])
 def login():
-    from app.sign_up_in import authenticate_user
-
     data = request.json
     if not data:
         return jsonify({"message": "Invalid inputs. Please provide JSON data."}), 400
@@ -111,8 +127,6 @@ def profile():
 @api.route('/delete_user', methods=['POST'])
 @login_required_to_api
 def delete_user():
-    from app.sign_up_in import delete_user_from_db
-    
     data = request.json
     if not data:
         return jsonify({"message": "Invalid inputs. Please provide JSON data."}), 400
@@ -175,7 +189,6 @@ def candlestick():
 def plot_helper(symbol):
     from app.queries import select_data_by_symbol
     from app.db import get_connection, release_connection
-    from app.settings import logger
     
     connection = None
     try:
@@ -219,41 +232,34 @@ def validate_data(data, symbol):
 
 @api.route("/contact", methods=["POST"])
 def contact():
-    from app.sign_up_in import send_contact_email
+    data = request.json
+    if not data:
+        logger.error("No JSON data provided in the request.")
+        return jsonify({"message": "Invalid inputs. Please provide JSON data."}), 400
 
-    try:
-        data = request.json
-        if not data:
-            logger.error("No JSON data provided in the request.")
-            return jsonify({"message": "Invalid inputs. Please provide JSON data."}), 400
+    name = data.get("name")
+    email = data.get("email")
+    message = data.get("message")
 
-        name = data.get("name")
-        email = data.get("email")
-        message = data.get("message")
+    if not name or not email or not message:
+        logger.error("Missing required fields: name, email, or message.")
+        return jsonify({"message": "Invalid inputs. All fields are required."}), 400
 
-        if not name or not email or not message:
-            logger.error("Missing required fields: name, email, or message.")
-            return jsonify({"message": "Invalid inputs. All fields are required."}), 400
-
-        logger.info(f"Attempting to send email with name: {name}, email: {email}, message: {message}")
-        email_sent = send_contact_email(name, email, message)
-
-        if email_sent:
-            logger.info("Email sent successfully.")
-            return jsonify({"message": "Email sent successfully!"}), 200
-        else:
-            logger.error("Failed to send email.")
-            return jsonify({"message": "Failed to send email!"}), 500
-    except Exception as e:
-        logger.error(f"An unexpected error occurred: {e}")
-        return jsonify({"message": "An internal server error occurred."}), 500
+    logger.info(f"Attempting to send email with name: {name}, email: {email}, message: {message}")
+    subject = "Contact Form Submission"
+    body = f"Name: {name}\nEmail: {email}\nMessage: {message}"
+    from_email = app.config["MAIL_DEFAULT_SENDER"]
+    to_email = app.config["MAIL_DEFAULT_SENDER"]
+    email_sent = asyncio.run(send_email(subject, body, from_email, to_email))
+    if email_sent:
+        return jsonify({"message": "Email sent successfully!"}), 200
+    else:
+        return jsonify({"message": "Failed to send email!"}), 500
 
 
 @api.route("/update_user_password", methods=["POST"])
 @login_required_to_api
 def update_user_password():
-    from app.sign_up_in import update_password
-
     data = request.json
     if not data:
         return jsonify({"message": "Invalid inputs. Please provide JSON data."}), 400
@@ -274,8 +280,6 @@ def update_user_password():
 @api.route("/update_user_email", methods=["POST"])
 @login_required_to_api
 def update_user_email():
-    from app.sign_up_in import update_email
-
     data = request.json
     if not data:
         return jsonify({"message": "Invalid inputs. Please provide JSON data."}), 400

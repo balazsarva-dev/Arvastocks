@@ -17,6 +17,7 @@
   
   .chart-input-field {
     background-color: #ffffff; /* White background for input */
+    color: #000000; /* Black text for input */
     width: 50%;
     padding: 12px;
     font-size: 1rem; /* Adjust font size */

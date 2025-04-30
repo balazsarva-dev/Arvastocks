@@ -2,7 +2,6 @@ from app.settings import logger
 from flask import Flask
 from flask_compress import Compress
 from flask_caching import Cache
-from flask_mail import Mail
 from flask_wtf.csrf import CSRFProtect
 import pymysql
 from dbutils.pooled_db import PooledDB
@@ -37,10 +36,9 @@ def create_db_pool():
 def register_extensions(app):
     cache = Cache(app)
     compress = Compress(app)
-    mail = Mail(app)
     csrf = CSRFProtect(app)
     logger.info("Extensions registered successfully.")
-    return cache, compress, mail, csrf
+    return cache, compress, csrf
 
 
 from app.db import init_db
@@ -59,7 +57,7 @@ app.db_pool = create_db_pool()
 
 init_app(app)
 
-cache, compress, mail, csrf = register_extensions(app)
+cache, compress, csrf = register_extensions(app)
 from app.api_routes import api as api_blueprint
 csrf.exempt(api_blueprint)
 app.register_blueprint(api_blueprint, url_prefix="/api")

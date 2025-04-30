@@ -154,6 +154,7 @@ button:focus-visible {
 
 .form-container input {
   background-color: #ffffff; /* Light background for input fields */
+  color: #000000;
   width: 100%; /* Full width */
   padding: 12px; /* Add padding for better usability */
   margin-bottom: 16px; /* Add spacing between fields */

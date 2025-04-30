@@ -6,12 +6,12 @@ from app.queries import (
     update_user_password,
     update_user_email,
 )
+from app import app
 from app.db import get_connection, release_connection
 from app.settings import logger
-from app import mail
-from flask_mail import Message
 from bcrypt import hashpw, checkpw, gensalt
-import os
+from email.message import EmailMessage
+from aiosmtplib import send
 
 def sign_up_user(username, password, email):
     connection = None
@@ -69,35 +69,34 @@ def authenticate_user(username, password):
         logger.error(f"Error signing in: {e}")
         return {"success": False, "error": "Internal server error"}
 
-def send_contact_email(name, email, message):
+
+async def send_email(subject, body, from_email, to_email):
     try:
-        msg = Message(
-            subject="Contact Form Submission",
-            sender=os.getenv("MAIL_DEFAULT_SENDER"),
-            recipients=[os.getenv("MAIL_DEFAULT_SENDER")],
-            body=f"Name: {name}\nEmail: {email}\nMessage: {message}",
+        msg = EmailMessage()
+        msg["Subject"] = subject
+        msg["From"] = from_email
+        msg["To"] = to_email
+        msg.set_content(body)
+
+        smtp_host = app.config["MAIL_SERVER"]
+        smtp_port = app.config["MAIL_PORT"]
+        smtp_username = app.config["MAIL_USERNAME"]
+        smtp_password = app.config["MAIL_PASSWORD"]
+        
+        await send(
+            msg,
+            hostname=smtp_host,
+            port=smtp_port,
+            username=smtp_username,
+            password=smtp_password,
+            use_tls=False,
+            start_tls=True
         )
-        msg.send()
-        logger.info(f"Contact email sent to {os.getenv('MAIL_DEFAULT_SENDER')}")
         return True
     except Exception as e:
-        logger.error(f"Error sending message: {e}")
+        logger.error(f"Error sending email: {e}", exc_info=True)
         return False
 
-def registration_accepted_message(username, email):
-    try:
-        msg = Message(
-            subject="Registration Accepted",
-            sender=os.getenv("MAIL_DEFAULT_SENDER"),
-            recipients=[email],
-            body=f"Hello {username},\n\nYour registration has been accepted.\n\nBest regards,\nThe Team",
-        )
-        msg.send()
-        logger.info(f"Registration accepted email sent to {email}")
-        return True
-    except Exception as e:
-        logger.error(f"Error sending registration accepted message: {e}")
-        return False
 
 def update_password(username, old_password, new_password):
     connection = None
@@ -156,6 +155,7 @@ def delete_user_from_db(username, email, password):
     except Exception as e:
         logger.error(f"Error deleting user: {e}")
         return False
+
 
 def update_email(username, new_email, password):
     connection = None
