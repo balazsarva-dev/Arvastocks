@@ -45,7 +45,7 @@ def home():
     return jsonify({"message": "Welcome to the Arvastocks API!"}), 200
 
 @api.route("/register", methods=["POST"])
-def register():
+async def register():
     data = request.json
     if not data:
         return jsonify({"message": "Invalid inputs. Please provide JSON data."}), 400
@@ -68,7 +68,7 @@ def register():
         from_email = app.config["MAIL_DEFAULT_SENDER"]
         to_email = email
         
-        email_sent = asyncio.run(send_email(subject, body, from_email, to_email))
+        email_sent = await send_email(subject, body, from_email, to_email)
         if email_sent:
             return jsonify({"message": "User registered, and sent welcome email!"}), 200
         else:
@@ -231,7 +231,7 @@ def validate_data(data, symbol):
 
 
 @api.route("/contact", methods=["POST"])
-def contact():
+async def contact():
     data = request.json
     if not data:
         logger.error("No JSON data provided in the request.")
@@ -250,7 +250,7 @@ def contact():
     body = f"Name: {name}\nEmail: {email}\nMessage: {message}"
     from_email = app.config["MAIL_DEFAULT_SENDER"]
     to_email = app.config["MAIL_DEFAULT_SENDER"]
-    email_sent = asyncio.run(send_email(subject, body, from_email, to_email))
+    email_sent = await send_email(subject, body, from_email, to_email)
     if email_sent:
         return jsonify({"message": "Email sent successfully!"}), 200
     else:
