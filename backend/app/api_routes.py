@@ -71,8 +71,11 @@ def register():
         
         thread = Thread(target=send_email_in_background, args=(subject, body, from_email, to_email))
         thread.start()
-        
+        thread.join()
+        logger.info(f"Sent welcome email to {email}")
         return jsonify({"message": "User registered, and sent welcome email!"}), 200
+    else:
+        return jsonify({"message": "Failed to register user!"}), 500
 
 @api.route('/login', methods=['POST'])
 def login():
@@ -250,6 +253,8 @@ def contact():
 
     thread = Thread(target=send_email_in_background, args=(subject, body, from_email, to_email))
     thread.start()
+    thread.join()
+    logger.info(f"Sent contact email to {to_email} from {from_email}")
     return jsonify({"message": "Email sent successfully!"}), 200
 
 @api.route("/update_user_password", methods=["POST"])

@@ -73,6 +73,7 @@ def authenticate_user(username, password):
 
 async def send_email(subject, body, from_email, to_email):
     try:
+        logger.info("Preparing to send email...")
         msg = EmailMessage()
         msg["Subject"] = subject
         msg["From"] = from_email
@@ -84,6 +85,7 @@ async def send_email(subject, body, from_email, to_email):
         smtp_username = app.config["MAIL_USERNAME"]
         smtp_password = app.config["MAIL_PASSWORD"]
         
+        logger.info(f"Connecting to SMTP server: {smtp_host}:{smtp_port}")
         await send(
             msg,
             hostname=smtp_host,
@@ -93,16 +95,14 @@ async def send_email(subject, body, from_email, to_email):
             use_tls=False,
             start_tls=True
         )
+        logger.info("Email sent successfully")
         return True
     except Exception as e:
         logger.error(f"Error sending email: {e}", exc_info=True)
         return False
 
 def send_email_in_background(subject, body, from_email, to_email):
-    try:
-        asyncio.run(send_email(subject, body, from_email, to_email))
-    except Exception as e:
-        logger.error(f"Error sending email in background: {e}", exc_info=True)
+    asyncio.run(send_email(subject, body, from_email, to_email))
 
 def update_password(username, old_password, new_password):
     connection = None
