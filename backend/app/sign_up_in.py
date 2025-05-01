@@ -12,6 +12,7 @@ from app.settings import logger
 from bcrypt import hashpw, checkpw, gensalt
 from email.message import EmailMessage
 from aiosmtplib import send
+import asyncio
 
 def sign_up_user(username, password, email):
     connection = None
@@ -97,6 +98,11 @@ async def send_email(subject, body, from_email, to_email):
         logger.error(f"Error sending email: {e}", exc_info=True)
         return False
 
+def send_email_in_background(subject, body, from_email, to_email):
+    try:
+        asyncio.run(send_email(subject, body, from_email, to_email))
+    except Exception as e:
+        logger.error(f"Error sending email in background: {e}", exc_info=True)
 
 def update_password(username, old_password, new_password):
     connection = None

@@ -3,15 +3,16 @@ from app.settings import login_required_to_api, logger
 from app.helper import fetch_data_from_api
 from app.sign_up_in import (
                             sign_up_user,
-                            send_email,
+                            send_email_in_background,
                             authenticate_user, 
                             delete_user_from_db,
                             update_email, 
                             update_password
 )
 from app import app
-import asyncio
 import re
+from threading import Thread
+
 
 api = Blueprint("api", __name__)
 
@@ -45,7 +46,7 @@ def home():
     return jsonify({"message": "Welcome to the Arvastocks API!"}), 200
 
 @api.route("/register", methods=["POST"])
-async def register():
+def register():
     data = request.json
     if not data:
         return jsonify({"message": "Invalid inputs. Please provide JSON data."}), 400
@@ -68,14 +69,10 @@ async def register():
         from_email = app.config["MAIL_DEFAULT_SENDER"]
         to_email = email
         
-        email_sent = await send_email(subject, body, from_email, to_email)
-        if email_sent:
-            return jsonify({"message": "User registered, and sent welcome email!"}), 200
-        else:
-            return jsonify({"message": "User registered successfully, but failed to send welcome email!"}), 500
-    else:
-        return jsonify({"message": "Failed to register user!"}), 500
-
+        thread = Thread(target=send_email_in_background, args=(subject, body, from_email, to_email))
+        thread.start()
+        
+        return jsonify({"message": "User registered, and sent welcome email!"}), 200
 
 @api.route('/login', methods=['POST'])
 def login():
@@ -231,7 +228,7 @@ def validate_data(data, symbol):
 
 
 @api.route("/contact", methods=["POST"])
-async def contact():
+def contact():
     data = request.json
     if not data:
         logger.error("No JSON data provided in the request.")
@@ -250,12 +247,10 @@ async def contact():
     body = f"Name: {name}\nEmail: {email}\nMessage: {message}"
     from_email = app.config["MAIL_DEFAULT_SENDER"]
     to_email = app.config["MAIL_DEFAULT_SENDER"]
-    email_sent = await send_email(subject, body, from_email, to_email)
-    if email_sent:
-        return jsonify({"message": "Email sent successfully!"}), 200
-    else:
-        return jsonify({"message": "Failed to send email!"}), 500
 
+    thread = Thread(target=send_email_in_background, args=(subject, body, from_email, to_email))
+    thread.start()
+    return jsonify({"message": "Email sent successfully!"}), 200
 
 @api.route("/update_user_password", methods=["POST"])
 @login_required_to_api
