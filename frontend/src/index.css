@@ -296,7 +296,7 @@ button:focus-visible {
   font-size: 1rem; /* Adjust font size */
   border: 2px solid #ccc; /* Slightly thicker border */
   border-radius: 8px; /* Rounded corners */
-  background-color: #000000; /* Light background for contrast */
+  background-color: #ffffff; /* Light background for contrast */
   color: #333; /* Darker text color for readability */
   resize: vertical; /* Allow vertical resizing */
   transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus effect */
