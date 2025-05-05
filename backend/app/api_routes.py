@@ -3,7 +3,7 @@ from app.settings import login_required_to_api, logger
 from app.helper import fetch_data_from_api
 from app.sign_up_in import (
                             sign_up_user,
-                            send_email_in_background,
+                            send_email_via_sendgrid,
                             authenticate_user, 
                             delete_user_from_db,
                             update_email, 
@@ -69,9 +69,8 @@ def register():
         from_email = app.config["MAIL_DEFAULT_SENDER"]
         to_email = email
         
-        thread = Thread(target=send_email_in_background, args=(subject, body, from_email, to_email))
+        thread = Thread(target=send_email_via_sendgrid, args=(subject, body, from_email, to_email))
         thread.start()
-        thread.join()
         logger.info(f"Sent welcome email to {email}")
         return jsonify({"message": "User registered, and sent welcome email!"}), 200
     else:
@@ -251,9 +250,8 @@ def contact():
     from_email = app.config["MAIL_DEFAULT_SENDER"]
     to_email = app.config["MAIL_DEFAULT_SENDER"]
 
-    thread = Thread(target=send_email_in_background, args=(subject, body, from_email, to_email))
+    thread = Thread(target=send_email_via_sendgrid, args=(subject, body, from_email, to_email))
     thread.start()
-    thread.join()
     logger.info(f"Sent contact email to {to_email} from {from_email}")
     return jsonify({"message": "Email sent successfully!"}), 200
 

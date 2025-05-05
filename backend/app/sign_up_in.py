@@ -10,9 +10,9 @@ from app import app
 from app.db import get_connection, release_connection
 from app.settings import logger
 from bcrypt import hashpw, checkpw, gensalt
-from email.message import EmailMessage
-from aiosmtplib import send
-import asyncio
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 def sign_up_user(username, password, email):
     connection = None
@@ -71,38 +71,21 @@ def authenticate_user(username, password):
         return {"success": False, "error": "Internal server error"}
 
 
-async def send_email(subject, body, from_email, to_email):
+def send_email_via_sendgrid(subject, body, from_email, to_email):
+    message = Mail(
+        from_email=from_email,
+        to_emails=to_email,
+        subject=subject,
+        plain_text_content=body
+    )
     try:
-        logger.info("Preparing to send email...")
-        msg = EmailMessage()
-        msg["Subject"] = subject
-        msg["From"] = from_email
-        msg["To"] = to_email
-        msg.set_content(body)
-
-        smtp_host = app.config["MAIL_SERVER"]
-        smtp_port = app.config["MAIL_PORT"]
-        smtp_username = app.config["MAIL_USERNAME"]
-        smtp_password = app.config["MAIL_PASSWORD"]
-        
-        logger.info(f"Connecting to SMTP server: {smtp_host}:{smtp_port}")
-        await send(
-            msg,
-            hostname=smtp_host,
-            port=smtp_port,
-            username=smtp_username,
-            password=smtp_password,
-            use_tls=False,
-            start_tls=True
-        )
-        logger.info("Email sent successfully")
+        sg = SendGridAPIClient(app.config["SENDGRID_API_KEY"])
+        response = sg.send(message)
+        logger.info(f"Email sent to {to_email} with status code {response.status_code}")
         return True
     except Exception as e:
         logger.error(f"Error sending email: {e}", exc_info=True)
         return False
-
-def send_email_in_background(subject, body, from_email, to_email):
-    asyncio.run(send_email(subject, body, from_email, to_email))
 
 def update_password(username, old_password, new_password):
     connection = None
