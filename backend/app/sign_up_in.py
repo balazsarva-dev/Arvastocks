@@ -87,6 +87,27 @@ def send_email_via_sendgrid(subject, body, from_email, to_email):
         logger.error(f"Error sending email: {e}", exc_info=True)
         return False
 
+def send_registration_email(to_mail, username):
+    template_id = "d-6a8774520b404eaba9c528a02d0a0b5f"
+    message = Mail(
+        from_email=app.config["MAIL_DEFAULT_SENDER"],
+        to_emails=to_mail,
+        subject="Welcome to our service!"
+    )
+    message.template_id = template_id
+    message.dynamic_template_data = {
+        "username": username,
+        "support_email": app.config["MAIL_DEFAULT_SENDER"]
+    }
+    try:
+        sg = SendGridAPIClient(app.config["SENDGRID_API_KEY"])
+        response = sg.send(message)
+        logger.info(f"Email sent to {to_mail} with status code {response.status_code}")
+        return True
+    except Exception as e:
+        logger.error(f"Error sending email: {e}", exc_info=True)
+        return False
+
 def update_password(username, old_password, new_password):
     connection = None
     try:

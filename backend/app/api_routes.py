@@ -4,6 +4,7 @@ from app.helper import fetch_data_from_api
 from app.sign_up_in import (
                             sign_up_user,
                             send_email_via_sendgrid,
+                            send_registration_email,
                             authenticate_user, 
                             delete_user_from_db,
                             update_email, 
@@ -62,14 +63,8 @@ def register():
         return jsonify({"message": "Invalid email address."}), 400
 
     signed_up_user = sign_up_user(username, password, email)
-    if signed_up_user:
-        subject = "Welcome to Arvastocks!"
-        body = f"Hello {username},\n\nThank you for signing up for Arvastocks! We are excited to have you on board.\
-        \n\nBest regards,\nThe Arvastocks Team"
-        from_email = app.config["MAIL_DEFAULT_SENDER"]
-        to_email = email
-        
-        thread = Thread(target=send_email_via_sendgrid, args=(subject, body, from_email, to_email))
+    if signed_up_user:        
+        thread = Thread(target=send_registration_email, args=(email, username))
         thread.start()
         logger.info(f"Sent welcome email to {email}")
         return jsonify({"message": "User registered, and sent welcome email!"}), 200
