@@ -5,6 +5,7 @@ import HomePage from "./components/others/Home";
 import News from "./components/stocks/News";
 import AreaChart from "./components/stocks/AreaChart";
 import LineChart from "./components/stocks/LineChart";
+import CandlestickChart from "./components/stocks/CandlestickChart";
 import Contact from "./components/others/Contact";
 import About from "./components/others/About";
 import Terms from "./components/others/Terms";
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/news" element={<News />} />
           <Route path="/area-chart" element={<AreaChart />} />
           <Route path="/line-chart" element={<LineChart />} />
+          <Route path="/candlestick-chart" element={<CandlestickChart />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/terms" element={<Terms />} />
