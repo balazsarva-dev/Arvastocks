@@ -158,18 +158,11 @@ def news_data():
         logger.error(f"Error fetching news data: {e}")
         return jsonify({"error": "An error occurred while fetching news data"}), 500
     
-@api.route("/candlestick", methods=["POST"])
+@api.route("/candlestick", methods=["GET"])
 def candlestick():
-    data = request.json
-    if not data:
-        logger.error("No JSON data provided in the request.")
-        return jsonify({"message": "Invalid inputs. Please provide JSON data."}), 400
-
-    symbol = data.get("symbol")
-
+    symbol = request.args.get("symbol")
     if not symbol:
         return jsonify({"message": "Invalid inputs. Stock symbol is required."}), 400
-
     try:
         figure = plot_helper(symbol)
         if not figure:

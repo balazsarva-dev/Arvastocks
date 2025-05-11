@@ -1,149 +1,126 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Chart, registerables } from 'chart.js';
-import 'chartjs-adapter-date-fns'; // For time-based x-axis
-import zoomPlugin from 'chartjs-plugin-zoom'; // For zooming functionality
-import api from '../../services/api'; // Centralized Axios instance
-import './Chart.css'; // Import CSS for styling
+import zoomPlugin from 'chartjs-plugin-zoom'; // Import zoomPlugin directly
+import api from '../../services/api';
+import './Chart.css'; // Include the Chart.css file
 
-// Register chart.js components and plugins
-Chart.register(...registerables, zoomPlugin);
+Chart.register(...registerables, zoomPlugin); // Register Chart.js components and the zoom plugin
 
 const AreaChart = () => {
-  const chartRef = useRef(null); // Reference for the chart container
-  const chartInstance = useRef(null); // Reference to store the chart instance
-  const [symbol, setSymbol] = useState(''); // State for the stock symbol
-  const [error, setError] = useState(null); // State for error messages
-  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [symbol, setSymbol] = useState('AAPL'); // Default stock symbol
+  const [chartData, setChartData] = useState(null); // Chart.js data object
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state for the "Get Chart" button
 
-  const fetchChartData = async () => {
-    if (!symbol) {
-      setError('Please enter a stock symbol.');
-      return;
-    }
-
-    setLoading(true); // Start loading
-    setError(null); // Clear previous errors
-
+  // Fetch data for the selected stock symbol
+  const fetchData = async () => {
+    setLoading(true); // Show loading state
+    setError(null); // Reset error state
     try {
-      // Fetch chart data from the backend
-      const response = await api.post('/candlestick', { symbol });
+      const response = await api.get(`/candlestick`, { params: { symbol } } ); // Correct API call syntax
+      const rawData = response.data;
 
-      let rawData = response.data;
+      // Process the data for Chart.js
+      const labels = rawData.map((item) => new Date(item.x).toLocaleDateString()); // Dates
+      const prices = rawData.map((item) => item.c); // Closing prices
 
-      if (!rawData || rawData.length === 0) {
-        setError('No valid data available for the selected stock symbol.');
-        return;
-      }
-
-      // Filter data to include only the last 12 months
-      const twelveMonthsAgo = new Date();
-      twelveMonthsAgo.setMonth(twelveMonthsAgo.getMonth() - 12);
-
-      rawData = rawData.filter((item) => new Date(item.x) >= twelveMonthsAgo);
-
-      // If a chart already exists, destroy it before creating a new one
-      if (chartInstance.current) {
-        chartInstance.current.destroy();
-      }
-
-      // Create the area chart
-      const ctx = chartRef.current.getContext('2d');
-      chartInstance.current = new Chart(ctx, {
-        type: 'line', // Area chart is a line chart with `fill: true`
-        data: {
-          labels: rawData.map((item) => item.x), // Use x values as labels
-          datasets: [
-            {
-              label: `${symbol} Closing Prices`,
-              data: rawData.map((item) => item.c), // Use closing prices as data points
-              borderColor: 'rgba(75, 192, 192, 1)', // Line color
-              backgroundColor: 'rgba(75, 192, 192, 0.2)', // Fill color
-              borderWidth: 2,
-              fill: true, // Enable area fill
-              tension: 0.4, // Smooth the line
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: false, // Hide the legend
-            },
-            tooltip: {
-              enabled: true, // Enable tooltips
-            },
-            zoom: {
-              pan: {
-                enabled: true, // Enable panning
-                mode: 'xy', // Allow panning on both x and y axes
-              },
-              zoom: {
-                wheel: {
-                  enabled: true, // Enable zooming with the mouse wheel
-                },
-                pinch: {
-                  enabled: true, // Enable zooming with pinch gestures
-                },
-                mode: 'xy', // Allow zooming on both x and y axes
-              },
-            },
+      setChartData({
+        labels,
+        datasets: [
+          {
+            label: `${symbol} Closing Prices (Last 12 Months)`,
+            data: prices,
+            fill: true,
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 1)',
+            tension: 0.4, // Smooth curve
           },
-          scales: {
-            x: {
-              type: 'time', // Use a time scale for the x-axis
-              time: {
-                unit: 'month', // Group data by month
-              },
-              title: {
-                display: true,
-                text: 'Date',
-              },
-              grid: {
-                display: false, // Remove grid lines on the x-axis
-              },
-            },
-            y: {
-              title: {
-                display: true,
-                text: 'Price',
-              },
-              grid: {
-                display: true, // Keep grid lines on the y-axis
-              },
-            },
-          },
-        },
+        ],
       });
-
-      setError(null); // Clear any previous errors
-    } catch (err) {
-      console.error('Error fetching chart data:', err);
-      setError(
-        err.response?.data?.message || 'An error occurred. Please try again later.'
-      );
+    } catch (error) {
+      console.error('Error fetching stock data:', error);
+      setError('Failed to fetch chart data. Please try again.');
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false); // Hide loading state
     }
   };
 
   return (
-    <div className="chart">
-      <h1>Area Chart (Last 12 Months)</h1>
-      <div className="chart-input">
-        <input
-          type="text"
-          placeholder="Enter stock symbol"
+    <div className="chart-container area-chart-container">
+      <h1>Area Chart</h1>
+      <div className="chart area-chart">
+        <label htmlFor="stock-select"></label>
+        <select
+          id="stock-select"
           value={symbol}
-          onChange={(e) => setSymbol(e.target.value.toUpperCase())} // Convert input to uppercase
-          className="chart-input-field"
-        />
-        <button onClick={fetchChartData} className="chart-button" disabled={loading}>
+          onChange={(e) => setSymbol(e.target.value)}
+          className="form-select"
+        >
+          <option value="WFC">WFC</option>
+          <option value="NVDA">NVDA</option>
+          <option value="HD">HD</option>
+          <option value="AMZN">AMZN</option>
+          <option value="AAPL">AAPL</option>
+          <option value="BAC">BAC</option>
+          <option value="MSFT">MSFT</option>
+          <option value="JPM">JPM</option>
+        </select>
+        <button onClick={fetchData} className="form-button" disabled={loading}>
           {loading ? 'Loading...' : 'Get Chart'}
         </button>
       </div>
       {error && <p className="error-message">{error}</p>}
-      <canvas ref={chartRef} style={{ width: '100%', height: '500px', backgroundColor: 'white' }} /> {/* Chart container */}
+      <div className="chart">
+        {chartData ? (
+          <canvas
+            id="areaChart"
+            ref={(canvas) => {
+              if (canvas) {
+                new Chart(canvas, {
+                  type: 'line', // Area chart is a line chart with fill
+                  data: chartData,
+                  options: {
+                    responsive: true,
+                    plugins: {
+                      zoom: {
+                        pan: {
+                          enabled: true,
+                          mode: 'x', // Allow panning on the x-axis
+                        },
+                        zoom: {
+                          wheel: {
+                            enabled: true, // Allow zooming with the mouse wheel
+                          },
+                          pinch: {
+                            enabled: true, // Allow zooming with pinch gestures
+                          },
+                          mode: 'x', // Zoom on the x-axis
+                        },
+                      },
+                    },
+                    scales: {
+                      x: {
+                        title: {
+                          display: true,
+                          text: 'Date',
+                        },
+                      },
+                      y: {
+                        title: {
+                          display: true,
+                          text: 'Price (USD)',
+                        },
+                      },
+                    },
+                  },
+                });
+              }
+            }}
+          />
+        ) : (
+          <p>Select a stock symbol and click "Get Chart" to load data.</p>
+        )}
+      </div>
     </div>
   );
 };

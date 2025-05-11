@@ -2,7 +2,7 @@ const About = () => {
     return (
       <div className="about-container">
         <h1>About Us</h1>
-        <p>Welcome to Arvastocks! This project is a labor of passion, created by Balazs Arva,
+        <p>This project is a labor of passion, created by Balazs Arva,
         a dedicated Python developer with a keen interest in challenges, both in backend and frontend. I have been immersed
         in the world of coding in the last couple of years, a journey fueled by a desire to learn and grow continuously.
         This app represents a significant step in that journey, providing a practical platform to apply and expand

@@ -1,63 +1,73 @@
-.chart {
-    background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 100%; /* Full width */
-    max-width: 800px; /* Prevent overflow */
-    margin: 20px auto; /* Center horizontally with spacing */
-  }
-  
-  .chart-input {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 40px; /* Space between input and chart */
-  }
-  
-  .chart-input-field {
-    background-color: #ffffff; /* White background for input */
-    color: #000000; /* Black text for input */
-    width: 50%;
-    padding: 12px;
-    font-size: 1rem; /* Adjust font size */
-    border-radius: 8px;
-    margin-right: 10px;
-    border: 2px solid #ccc; /* Slightly thicker border */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 0 8px rgba(236, 108, 3, 0.5); /* Subtle glow effect */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus effect */
-  }
+/* Main page container for centering and spacing */
+.page-container, .main-container, .chart-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 32px 24px;
+  background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(49, 161, 84, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
 
-  .chart-input-field:focus {
-    border-color: #f86204; /* Green border on focus */
-    box-shadow: 0 0 8px rgba(49, 161, 84, 0.5); /* Green glow effect */
-    outline: none;
-  }
-  
-  .chart-button {
-    padding: 12px 30px; /* Larger buttons */
-    font-size: 1rem; /* Adjust font size */
-    margin: 15px; /* Add spacing between buttons */
-    background-color: #31a154; /* Green background for buttons */
-    color: #ffffff; /* White text */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor */
-    transition: background-color 0.3s ease; /* Smooth hover effect */
-  }
-  
-  .chart-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .chart-button:hover:not(:disabled) {
-    background-color: #283da7;
-  }
-  
-  .error-message {
-    color: red;
-    text-align: center;
-    margin-top: 10px;
-  }
+/* Consistent form styling */
+.form-container {
+  background: #31a154;
+  padding: 20px 24px;
+  border-radius: 10px;
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 2px 8px rgba(49, 161, 84, 0.10);
+}
+
+.form-container label {
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 500;
+}
+
+.form-select {
+  background: #fff;
+  color: #222;
+  border: 1.5px solid #228b22;
+  border-radius: 6px;
+  padding: 10px 18px;
+  font-size: 1.1rem;
+  min-width: 160px;
+}
+
+.form-button {
+  background: #31a154;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 18px;
+}
+
+.form-button:hover,
+.form-button:focus {
+  background: #283da7;
+}
+
+/* Chart area */
+.chart {
+  width: 100%;
+  background: #050505;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(49, 161, 84, 0.08);
+  margin-bottom: 24px;
+  margin: 0 auto 24px auto;
+}
+
+.chart canvas {
+  height: 440px !important;
+}

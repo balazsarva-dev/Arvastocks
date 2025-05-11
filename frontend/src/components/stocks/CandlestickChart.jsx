@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import Highcharts from 'highcharts/highstock';
-import api from '../../services/api'; // Axios instance for API calls
-import './Chart.css'; // Reuse the same CSS as AreaChart
+import api from '../../services/api';
+import './Chart.css';
 
 const CandlestickChart = () => {
-  const [symbol, setSymbol] = useState(''); // State for the stock symbol input
-  const [chartOptions, setChartOptions] = useState(null); // State for chart configuration
-  const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(null); // Error state
+  const [symbol, setSymbol] = useState('AAPL');
+  const [range, setRange] = useState('all'); // '1m', '3m', or 'all'
+  const [chartOptions, setChartOptions] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Function to fetch candlestick data
   const fetchData = async () => {
     if (!symbol) {
-      setError('Please enter a stock symbol.');
+      setError('Please select a stock symbol.');
       return;
     }
 
@@ -21,47 +21,59 @@ const CandlestickChart = () => {
     setError(null);
 
     try {
-      // Fetch data from the backend
-      const response = await api.post('/candlestick', { symbol });
-      const rawData = response.data;
-
-      console.log('Raw Data:', rawData); // Debugging: Log the raw data
+      const response = await api.get('/candlestick', { params: { symbol } });
+      let rawData = response.data;
 
       if (!rawData || rawData.length === 0) {
         setError('No data available for the selected stock symbol.');
+        setChartOptions(null);
         return;
       }
 
-      // Format the data for Highcharts
-      const formattedData = rawData.map((item) => [
-        new Date(item.x).getTime(), // Convert date to timestamp
-        item.o, // Open
-        item.h, // High
-        item.l, // Low
-        item.c, // Close
+      // Sort data by date ascending
+      rawData = rawData
+        .map(item => ({
+          ...item,
+          timestamp: new Date(item.x).getTime(),
+        }))
+        .sort((a, b) => a.timestamp - b.timestamp);
+
+      // Filter data based on selected range
+      let filteredData = rawData;
+      if (range !== 'all') {
+        const now = Date.now();
+        let months = range === '1m' ? 1 : 3;
+        const cutoff = new Date();
+        cutoff.setMonth(cutoff.getMonth() - months);
+        filteredData = rawData.filter(item => item.timestamp >= cutoff.getTime());
+      }
+
+      const formattedData = filteredData.map(item => [
+        item.timestamp,
+        item.o,
+        item.h,
+        item.l,
+        item.c,
       ]);
 
-      console.log('Formatted Data:', formattedData); // Debugging: Log the formatted data
-
-      // Update chart options
       setChartOptions({
         title: {
           text: `${symbol} Candlestick Chart`,
         },
         rangeSelector: {
-          selected: 0, // Default range selector option
+          selected: 0,
         },
         chart: {
-          zoomType: 'x', // Enable zooming on the x-axis
-          panning: true, // Enable panning
-          panKey: 'shift', // Hold "Shift" to pan
+          zoomType: 'x',
+          panning: true,
+          panKey: 'shift',
         },
         xAxis: {
-          type: 'datetime', // Time-based x-axis
+          type: 'datetime',
         },
         yAxis: {
           title: {
-            text: 'Price-USD',
+            text: 'Price (USD)',
           },
         },
         series: [
@@ -70,10 +82,10 @@ const CandlestickChart = () => {
             name: symbol,
             data: formattedData,
             tooltip: {
-              valueDecimals: 2, // Show 2 decimal places in tooltips
+              valueDecimals: 2,
             },
             dataGrouping: {
-              enabled: false,
+              enabled: true,
             },
           },
         ],
@@ -81,37 +93,58 @@ const CandlestickChart = () => {
 
       setError(null);
     } catch (err) {
-      console.error('Error fetching candlestick data:', err);
       setError('Failed to fetch candlestick data.');
+      setChartOptions(null);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="chart">
+    <div className="chart-container">
       <h1>Candlestick Chart</h1>
-      <div className="chart-input">
-        {/* Search bar for stock symbol */}
-        <input
-          type="text"
-          placeholder="Enter stock symbol"
+      <div className="form-container">
+        <label htmlFor="stock-select">Select Stock Symbol:</label>
+        <select
+          id="stock-select"
           value={symbol}
-          onChange={(e) => setSymbol(e.target.value.toUpperCase())}
-          className="chart-input-field"
-        />
-        <button onClick={fetchData} className="chart-button" disabled={loading}>
+          onChange={(e) => setSymbol(e.target.value)}
+          className="form-select"
+        >
+          <option value="AAPL">AAPL</option>
+          <option value="GOOGL">GOOGL</option>
+          <option value="MSFT">MSFT</option>
+          <option value="AMZN">AMZN</option>
+          <option value="NVDA">NVDA</option>
+          <option value="HD">HD</option>
+          <option value="BAC">BAC</option>
+          <option value="JPM">JPM</option>
+        </select>
+        <label htmlFor="range-select" style={{ marginLeft: 16 }}>Range:</label>
+        <select
+          id="range-select"
+          value={range}
+          onChange={(e) => setRange(e.target.value)}
+          className="form-select"
+        >
+          <option value="1m">1 Month</option>
+          <option value="3m">3 Months</option>
+          <option value="all">All</option>
+        </select>
+        <button onClick={fetchData} className="form-button" disabled={loading}>
           {loading ? 'Loading...' : 'Get Chart'}
         </button>
       </div>
       {error && <p className="error-message">{error}</p>}
-      {chartOptions && (
-        <HighchartsReact
-          highcharts={Highcharts}
-          constructorType={'stockChart'} // Use Highcharts Stock for candlestick charts
-          options={chartOptions}
-        />
-      )}
+      <div className="chart">
+        {chartOptions && (
+          <HighchartsReact
+            highcharts={Highcharts}
+            constructorType={'stockChart'}
+            options={chartOptions}
+          />
+        )}
+      </div>
     </div>
   );
 };
