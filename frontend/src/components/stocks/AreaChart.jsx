@@ -28,7 +28,7 @@ const AreaChart = () => {
         labels,
         datasets: [
           {
-            label: `${symbol} Closing Prices (Last 12 Months)`,
+            label: `${symbol} Closing Prices`,
             data: prices,
             fill: true,
             backgroundColor: 'rgba(75, 192, 192, 0.2)',

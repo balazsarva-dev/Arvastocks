@@ -1,6 +1,6 @@
 /* Main page container for centering and spacing */
 .page-container, .main-container, .chart-container {
-  max-width: 700px;
+  max-width: 800px;
   margin: 40px auto;
   padding: 32px 24px;
   background: rgba(0, 0, 0, 0.8); /* Darker semi-transparent background */
@@ -62,12 +62,13 @@
   width: 100%;
   background: #050505;
   border-radius: 10px;
-  padding: 24px;
+  padding: 32px;
   box-shadow: 0 2px 8px rgba(49, 161, 84, 0.08);
   margin-bottom: 24px;
   margin: 0 auto 24px auto;
 }
 
 .chart canvas {
-  height: 440px !important;
+  height: 600px !important;
+  width: 110% !important;
 }

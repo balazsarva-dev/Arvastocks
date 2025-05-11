@@ -104,20 +104,20 @@ const CandlestickChart = () => {
     <div className="chart-container">
       <h1>Candlestick Chart</h1>
       <div className="form-container">
-        <label htmlFor="stock-select">Select Stock Symbol:</label>
+        <label htmlFor="stock-select"></label>
         <select
           id="stock-select"
           value={symbol}
           onChange={(e) => setSymbol(e.target.value)}
           className="form-select"
         >
-          <option value="AAPL">AAPL</option>
-          <option value="GOOGL">GOOGL</option>
-          <option value="MSFT">MSFT</option>
-          <option value="AMZN">AMZN</option>
+          <option value="WFC">WFC</option>
           <option value="NVDA">NVDA</option>
           <option value="HD">HD</option>
+          <option value="AMZN">AMZN</option>
+          <option value="AAPL">AAPL</option>
           <option value="BAC">BAC</option>
+          <option value="MSFT">MSFT</option>
           <option value="JPM">JPM</option>
         </select>
         <label htmlFor="range-select" style={{ marginLeft: 16 }}>Range:</label>

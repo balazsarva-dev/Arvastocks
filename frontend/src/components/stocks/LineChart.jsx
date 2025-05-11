@@ -28,7 +28,7 @@ const LineChart = () => {
         labels,
         datasets: [
           {
-            label: `${symbol} Closing Prices (Last 12 Months)`,
+            label: `${symbol} Closing Prices`,
             data: prices,
             fill: false,
             backgroundColor: 'rgba(75, 192, 192, 0.2)',
