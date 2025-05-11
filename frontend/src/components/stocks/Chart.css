@@ -13,19 +13,20 @@
 
 /* Consistent form styling */
 .form-container {
-  background: #31a154;
-  padding: 20px 24px;
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 32px 24px;
   border-radius: 10px;
   margin-bottom: 32px;
   display: flex;
-  align-items: center;
-  gap: 18px;
-  box-shadow: 0 2px 8px rgba(49, 161, 84, 0.10);
+  flex-direction: row;
+  align-items: left;
+  box-shadow: 0 4px 24px rgba(49, 161, 84, 0.08);
 }
 
 .form-container label {
   color: #fff;
-  font-size: 1.15rem;
+  font-size: 1.0rem;
   font-weight: 500;
 }
 
@@ -57,7 +58,6 @@
   background: #283da7;
 }
 
-/* Chart area */
 .chart {
   width: 100%;
   background: #050505;
@@ -65,10 +65,4 @@
   padding: 32px;
   box-shadow: 0 2px 8px rgba(49, 161, 84, 0.08);
   margin-bottom: 24px;
-  margin: 0 auto 24px auto;
-}
-
-.chart canvas {
-  height: 600px !important;
-  width: 110% !important;
 }

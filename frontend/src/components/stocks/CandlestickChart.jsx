@@ -103,8 +103,8 @@ const CandlestickChart = () => {
   return (
     <div className="chart-container">
       <h1>Candlestick Chart</h1>
-      <div className="form-container">
-        <label htmlFor="stock-select"></label>
+      <div className="chart area-chart">
+        <label htmlFor="stock-select">Symbol: </label>
         <select
           id="stock-select"
           value={symbol}
@@ -120,7 +120,7 @@ const CandlestickChart = () => {
           <option value="MSFT">MSFT</option>
           <option value="JPM">JPM</option>
         </select>
-        <label htmlFor="range-select" style={{ marginLeft: 16 }}>Range:</label>
+        <label htmlFor="range-select" style={{ marginLeft: 16 }}>Range: </label>
         <select
           id="range-select"
           value={range}
@@ -144,6 +144,7 @@ const CandlestickChart = () => {
             options={chartOptions}
           />
         )}
+          <p>Select a stock symbol and the range, and click "Get Chart" to load data.</p>
       </div>
     </div>
   );

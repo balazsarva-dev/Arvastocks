@@ -49,7 +49,7 @@ const LineChart = () => {
     <div className="chart-container area-chart-container">
       <h1>Line Chart</h1>
       <div className="chart area-chart">
-        <label htmlFor="stock-select"></label>
+        <label htmlFor="stock-select">Symbol: </label>
         <select
           id="stock-select"
           value={symbol}
