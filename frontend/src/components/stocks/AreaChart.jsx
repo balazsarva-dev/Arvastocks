@@ -64,6 +64,14 @@ const AreaChart = () => {
           <option value="BAC">BAC</option>
           <option value="MSFT">MSFT</option>
           <option value="JPM">JPM</option>
+          <option value="TMUS">TMUS</option>
+          <option value="VZ">VZ</option>
+          <option value="PEP">PEP</option>
+          <option value="TSM">TSM</option>
+          <option value="V">V</option>
+          <option value="UNP">UNP</option>
+          <option value="MA">MA</option>
+          <option value="INTC">INTC</option>
         </select>
         <button onClick={fetchData} className="form-button" disabled={loading}>
           {loading ? 'Loading...' : 'Get Chart'}

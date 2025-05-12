@@ -12,9 +12,11 @@ PASSWORD = os.getenv('MARIADB_PASSWORD')
 DATABASE = os.getenv('MARIADB_DATABASE')
 PORT = int(os.getenv('DB_PORT', 3306))
 API_KEY = os.getenv('API_KEY')
-POP_STOCKS1 = ["AAPL", "MSFT", "GOOG", "GOOGL", "AMZN", "NVDA", "TSLA", "META", "JPM", "BAC", "WFC", "HD"]
-POP_STOCKS2 = ["MCD", "NKE", "DIS", "JNJ", "UNH", "PFE", "XOM", "CVX", "TSM", "V", "UNP", "MA", "INTC"]
-POP_STOCKS3 = ["CSCO", "ORCL", "IBM", "CRM", "ADBE", "PYPL", "NFLX", "T", "VZ", "CMCSA", "TMUS", "SBUX", "PEP"]
+POP_STOCKS1 = ["AAPL", "MSFT", "AMZN", "NVDA", "JPM", "BAC", "WFC", "HD"]
+POP_STOCKS2 = ["MCD", "NKE", "DIS", "JNJ", "UNH", "PFE", "XOM", "CVX"]
+POP_STOCKS3 = ["IBM", "CRM", "NFLX", "T", "VZ", "CMCSA", "TMUS", "SBUX"]
+POP_STOCKS4 = ["ADBE", "CSCO", "GOOG", "GOOGL", "META", "ORCL", "PYPL", "TSLA"]
+POP_STOCKS5 = ["TMUS", "VZ", "PEP", "TSM", "V", "UNP", "MA", "INTC"]
 
 if not all([HOST, USER, PASSWORD, DATABASE, API_KEY]):
     logger.error('Missing environment variables.')
