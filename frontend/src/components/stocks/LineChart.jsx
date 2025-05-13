@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Chart, registerables } from 'chart.js';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import api from '../../services/api';
@@ -13,6 +13,9 @@ const LineChart = () => {
   const [rawData, setRawData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const chartRef = useRef(null);         // Reference to the canvas element
+  const chartInstance = useRef(null);    // Reference to the Chart.js instance
 
   const fetchData = async () => {
     setLoading(true);
@@ -39,7 +42,6 @@ const LineChart = () => {
   const filterAndSetChartData = (data, selectedRange) => {
     let filtered = data;
     if (selectedRange !== 'all') {
-      const now = Date.now();
       let months = 0;
       if (selectedRange === '1m') months = 1;
       if (selectedRange === '3m') months = 3;
@@ -53,28 +55,77 @@ const LineChart = () => {
     const labels = filtered.map(item => new Date(item.x).toLocaleDateString());
     const prices = filtered.map(item => item.c);
 
-    setChartData({
-      labels,
-      datasets: [
-        {
-          label: `${symbol} Closing Prices`,
-          data: prices,
-          fill: false,
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          tension: 0.4,
-        },
-      ],
-    });
+    setChartData(
+      labels.length > 0
+        ? {
+            labels,
+            datasets: [
+              {
+                label: `${symbol} Closing Prices`,
+                data: prices,
+                fill: false,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                tension: 0.4,
+              },
+            ],
+          }
+        : null
+    );
   };
 
   // When range changes, filter the already-fetched data
-  React.useEffect(() => {
+  useEffect(() => {
     if (rawData.length > 0) {
       filterAndSetChartData(rawData, range);
     }
     // eslint-disable-next-line
   }, [range]);
+
+  // Chart rendering and cleanup
+  useEffect(() => {
+    if (chartRef.current && chartData && chartData.labels && chartData.labels.length > 0) {
+      // Destroy previous chart instance if it exists
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+      }
+      chartInstance.current = new Chart(chartRef.current, {
+        type: 'line',
+        data: chartData,
+        options: {
+          responsive: true,
+          plugins: {
+            zoom: {
+              pan: {
+                enabled: true,
+                mode: 'x',
+              },
+              zoom: {
+                wheel: { enabled: true },
+                pinch: { enabled: true },
+                mode: 'x',
+              },
+            },
+          },
+          scales: {
+            x: {
+              title: { display: true, text: 'Date' },
+            },
+            y: {
+              title: { display: true, text: 'Price (USD)' },
+            },
+          },
+        },
+      });
+    }
+    // Cleanup on unmount
+    return () => {
+      if (chartInstance.current) {
+        chartInstance.current.destroy();
+        chartInstance.current = null;
+      }
+    };
+  }, [chartData]);
 
   return (
     <div className="chart-container area-chart-container">
@@ -87,7 +138,6 @@ const LineChart = () => {
           onChange={(e) => setSymbol(e.target.value)}
           className="form-select"
         >
-          {/* ...options... */}
           <option value="WFC">WFC</option>
           <option value="NVDA">NVDA</option>
           <option value="HD">HD</option>
@@ -125,44 +175,18 @@ const LineChart = () => {
       </div>
       {error && <p className="error-message">{error}</p>}
       <div className="chart">
-        {chartData ? (
+        {chartData && chartData.labels && chartData.labels.length > 0 ? (
           <canvas
+            ref={chartRef}
             id="areaChart"
-            ref={canvas => {
-              if (canvas) {
-                new Chart(canvas, {
-                  type: 'line',
-                  data: chartData,
-                  options: {
-                    responsive: true,
-                    plugins: {
-                      zoom: {
-                        pan: {
-                          enabled: true,
-                          mode: 'x',
-                        },
-                        zoom: {
-                          wheel: { enabled: true },
-                          pinch: { enabled: true },
-                          mode: 'x',
-                        },
-                      },
-                    },
-                    scales: {
-                      x: {
-                        title: { display: true, text: 'Date' },
-                      },
-                      y: {
-                        title: { display: true, text: 'Price (USD)' },
-                      },
-                    },
-                  },
-                });
-              }
-            }}
+            style={{ backgroundColor: '#fff', width: '100%', height: '440px' }}
           />
         ) : (
-          <p>Select a stock symbol and click "Get Chart" to load data.</p>
+          <p className="select-message" style={{ color: '#000' }}>
+            {rawData.length === 0
+              ? 'Select a stock symbol and click "Get Chart" to load data.'
+              : 'No data for this range.'}
+          </p>
         )}
       </div>
     </div>
