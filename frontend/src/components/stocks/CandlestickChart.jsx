@@ -137,6 +137,8 @@ const CandlestickChart = () => {
         >
           <option value="1m">1 Month</option>
           <option value="3m">3 Months</option>
+          <option value="6m">6 Months</option>
+          <option value="1y">1 Year</option>
           <option value="all">All</option>
         </select>
         <button onClick={fetchData} className="form-button" disabled={loading}>
