@@ -1,4 +1,5 @@
 import React, { lazy } from "react";
+import DonationSuccess from "./components/users/DonationSuccess";
 
 const HomePage = lazy(() => import("./components/others/Home"));
 const News = lazy(() => import("./components/stocks/News"));
@@ -15,6 +16,7 @@ const Profile = lazy(() => import("./components/users/Profile"));
 const ChangeEmail = lazy(() => import("./components/users/ChangeEmail"));
 const ChangePassword = lazy(() => import("./components/users/ChangePassword"));
 const Delete = lazy(() => import("./components/users/Delete"));
+const Donation = lazy(() => import("./components/users/Donation"));
 
 const routes = [
     { path: "/", element: <HomePage /> },
@@ -33,6 +35,8 @@ const routes = [
     { path: "/update_email", element: <ChangeEmail /> },
     { path: "/change_password", element: <ChangePassword /> },
     { path: "/delete_account", element: <Delete /> },
+    { path: "/donation", element: <Donation /> },
+    { path: "/donation-success", element: <DonationSuccess /> },
     // Add more routes as needed
 ];
 

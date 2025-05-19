@@ -22,6 +22,7 @@ const Navbar = () => {
         <li><a href="/candlestick-chart">Candlestick</a></li>
         <li><a href="/contact">Contact</a></li>
         <li><a href="/about">About</a></li>
+        <li><a href='/donation'>Donation</a></li>
         <li><a href="/login">Login</a></li>
         <li><a href="/profile">Profile</a></li>
       </ul>
