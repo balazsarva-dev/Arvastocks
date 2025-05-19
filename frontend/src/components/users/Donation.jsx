@@ -1,5 +1,5 @@
 import React from "react";
-import "./Chart.css"; // or import "./Donation.css" if you put the CSS there
+import "../stocks/Chart.css";
 
 const Donation = () => (
   <div className="chart-container donation-center">
