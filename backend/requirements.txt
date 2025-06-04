@@ -45,6 +45,7 @@ multidict==6.4.3
 mysql-connector-python-rf==2.2.2
 mysqlclient==2.2.7
 narwhals==1.33.0
+numpy==2.2.5
 ordered-set==4.1.0
 packaging==24.2
 pandas==2.2.3
@@ -62,7 +63,7 @@ pytz==2025.2
 ratelimit==2.2.1
 requests==2.32.3
 sendgrid==6.11.0
-setuptools==78.1.0
+setuptools==80.9.0
 six==1.17.0
 starkbank-ecdsa==2.2.0
 svgwrite==1.4.3
