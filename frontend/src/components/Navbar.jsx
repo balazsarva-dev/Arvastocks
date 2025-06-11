@@ -25,6 +25,7 @@ const Navbar = () => {
         <li><a href='/donation'>Donation</a></li>
         <li><a href="/login">Login</a></li>
         <li><a href="/profile">Profile</a></li>
+        <li><a href="/faq">FAQ</a></li>
       </ul>
     </header>
   );

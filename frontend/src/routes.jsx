@@ -17,6 +17,7 @@ const ChangeEmail = lazy(() => import("./components/users/ChangeEmail"));
 const ChangePassword = lazy(() => import("./components/users/ChangePassword"));
 const Delete = lazy(() => import("./components/users/Delete"));
 const Donation = lazy(() => import("./components/users/Donation"));
+const Faq = lazy(() => import("./components/Faq"));
 
 const routes = [
     { path: "/", element: <HomePage /> },
@@ -37,6 +38,7 @@ const routes = [
     { path: "/delete_account", element: <Delete /> },
     { path: "/donation", element: <Donation /> },
     { path: "/donation-success", element: <DonationSuccess /> },
+    { path: "/faq", element: <Faq /> },
     // Add more routes as needed
 ];
 
